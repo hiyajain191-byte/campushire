@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -80,20 +81,6 @@ export default function RegisterPage() {
       // =================================================
       // SAVE LOGIN DATA
       // =================================================
-
-      /*
-       * Backend response can be:
-       *
-       * {
-       *   token: "...",
-       *   user: {
-       *     id: "...",
-       *     name: "...",
-       *     email: "...",
-       *     role: "student"
-       *   }
-       * }
-       */
 
       if (data.token) {
         localStorage.setItem(
@@ -268,7 +255,7 @@ export default function RegisterPage() {
                 }
                 placeholder="Enter your full name"
                 disabled={loading}
-                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
+                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 bg-white outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
               />
             </div>
 
@@ -286,7 +273,7 @@ export default function RegisterPage() {
                 }
                 placeholder="you@example.com"
                 disabled={loading}
-                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
+                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 bg-white outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
               />
             </div>
 
@@ -304,7 +291,7 @@ export default function RegisterPage() {
                 }
                 placeholder="Create a password"
                 disabled={loading}
-                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
+                className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 bg-white outline-none focus:border-purple-900 focus:ring-1 focus:ring-purple-900/10 disabled:bg-slate-100"
               />
             </div>
 
@@ -345,3 +332,4 @@ export default function RegisterPage() {
     </main>
   );
 }
+
