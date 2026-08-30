@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { FormEvent } from "react";
+
 import {
   Briefcase,
   ArrowLeft,
@@ -16,6 +18,7 @@ import {
   CheckCircle2,
   AlertCircle,
   LogOut,
+  ChevronDown,
 } from "lucide-react";
 
 const API_URL = "https://campushire-xl9m.onrender.com";
@@ -82,9 +85,7 @@ export default function PostJobPage() {
       }
 
       if (!parsedUser.name) {
-        setError(
-          "Recruiter name not found. Please login again."
-        );
+        setError("Recruiter name not found. Please login again.");
         setCheckingUser(false);
         return;
       }
@@ -130,9 +131,7 @@ export default function PostJobPage() {
   // POST JOB
   // =====================================================
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log("POST JOB CLICKED");
@@ -178,9 +177,7 @@ export default function PostJobPage() {
     const recruiterId = user.id || user._id;
 
     if (!recruiterId) {
-      setError(
-        "Recruiter ID is missing. Please login again."
-      );
+      setError("Recruiter ID is missing. Please login again.");
       return;
     }
 
@@ -236,19 +233,13 @@ export default function PostJobPage() {
       // API
       // -------------------------------------------------
 
-      const response = await fetch(
-        `${API_URL}/recruiter-jobs`,
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify(jobData),
-        }
-      );
+      const response = await fetch(`${API_URL}/recruiter-jobs`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(jobData),
+      });
 
-      console.log(
-        "RESPONSE STATUS:",
-        response.status
-      );
+      console.log("RESPONSE STATUS:", response.status);
 
       const responseText = await response.text();
 
@@ -257,9 +248,7 @@ export default function PostJobPage() {
       let data: any = {};
 
       try {
-        data = responseText
-          ? JSON.parse(responseText)
-          : {};
+        data = responseText ? JSON.parse(responseText) : {};
       } catch {
         data = {};
       }
@@ -279,10 +268,7 @@ export default function PostJobPage() {
       // SUCCESS
       // -------------------------------------------------
 
-      console.log(
-        "JOB POSTED SUCCESSFULLY:",
-        data
-      );
+      console.log("JOB POSTED SUCCESSFULLY:", data);
 
       setSuccess("Job posted successfully!");
 
@@ -311,7 +297,7 @@ export default function PostJobPage() {
 
       if (error instanceof TypeError) {
         setError(
-          "Unable to connect to backend. Make sure NestJS is running on port 3000."
+          "Unable to connect to backend. Please try again."
         );
       } else {
         setError(
@@ -354,14 +340,12 @@ export default function PostJobPage() {
 
   return (
     <main className="min-h-screen bg-[#faf9fc] text-[#24163a]">
-
       {/* =================================================
           NAVBAR
       ================================================= */}
 
       <header className="border-b border-purple-100 bg-white">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-
           {/* LOGO */}
 
           <Link
@@ -383,7 +367,6 @@ export default function PostJobPage() {
           {/* NAVIGATION */}
 
           <nav className="hidden items-center gap-8 md:flex">
-
             <Link
               href="/recruiter"
               className="text-sm font-medium text-gray-600 hover:text-[#4c1d95]"
@@ -404,15 +387,12 @@ export default function PostJobPage() {
             >
               Applications
             </Link>
-
           </nav>
 
           {/* PROFILE */}
 
           <div className="flex items-center gap-3">
-
             <div className="hidden text-right sm:block">
-
               <p className="text-sm font-semibold text-[#24163a]">
                 {user.name}
               </p>
@@ -420,7 +400,6 @@ export default function PostJobPage() {
               <p className="text-xs text-gray-500">
                 Recruiter
               </p>
-
             </div>
 
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#eee7fa] text-sm font-bold text-[#4c1d95]">
@@ -435,9 +414,7 @@ export default function PostJobPage() {
             >
               <LogOut className="h-4 w-4" />
             </button>
-
           </div>
-
         </div>
       </header>
 
@@ -445,8 +422,7 @@ export default function PostJobPage() {
           CONTENT
       ================================================= */}
 
-      <div className="mx-auto max-w-4xl px-6 py-8">
-
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
         {/* BACK */}
 
         <Link
@@ -460,7 +436,6 @@ export default function PostJobPage() {
         {/* HEADER */}
 
         <div className="mb-8">
-
           <p className="mb-1 text-sm font-medium text-[#6d28d9]">
             RECRUITER
           </p>
@@ -470,22 +445,20 @@ export default function PostJobPage() {
           </h1>
 
           <p className="mt-2 text-sm text-gray-500">
-            Create a new opportunity and find the right candidate.
+            Create a new opportunity and find the right
+            candidate.
           </p>
-
         </div>
 
         {/* FORM */}
 
         <form onSubmit={handleSubmit}>
-
-          <div className="rounded-2xl border border-purple-100 bg-white p-6 shadow-sm sm:p-8">
-
+          <div className="rounded-2xl border border-purple-100 bg-white p-5 shadow-sm sm:p-8">
             {/* SUCCESS */}
 
             {success && (
               <div className="mb-6 flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                <CheckCircle2 className="h-5 w-5" />
+                <CheckCircle2 className="h-5 w-5 shrink-0" />
                 {success}
               </div>
             )}
@@ -494,7 +467,7 @@ export default function PostJobPage() {
 
             {error && (
               <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                <AlertCircle className="h-5 w-5" />
+                <AlertCircle className="h-5 w-5 shrink-0" />
                 {error}
               </div>
             )}
@@ -504,9 +477,7 @@ export default function PostJobPage() {
             ================================================= */}
 
             <div className="mb-8">
-
               <div className="mb-5">
-
                 <h2 className="text-lg font-semibold">
                   Basic Information
                 </h2>
@@ -514,25 +485,19 @@ export default function PostJobPage() {
                 <p className="mt-1 text-xs text-gray-500">
                   Add the basic details about the job.
                 </p>
-
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
-
                 {/* TITLE */}
 
                 <div className="sm:col-span-2">
-
                   <label className="mb-2 block text-sm font-medium">
                     Job Title{" "}
-                    <span className="text-red-500">
-                      *
-                    </span>
+                    <span className="text-red-500">*</span>
                   </label>
 
                   <div className="relative">
-
-                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Briefcase className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <input
                       type="text"
@@ -543,25 +508,19 @@ export default function PostJobPage() {
                       placeholder="e.g. Frontend Developer Intern"
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
 
                 {/* COMPANY */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Company Name{" "}
-                    <span className="text-red-500">
-                      *
-                    </span>
+                    <span className="text-red-500">*</span>
                   </label>
 
                   <div className="relative">
-
-                    <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Building2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <input
                       type="text"
@@ -572,25 +531,19 @@ export default function PostJobPage() {
                       placeholder="Company name"
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
 
                 {/* LOCATION */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Location{" "}
-                    <span className="text-red-500">
-                      *
-                    </span>
+                    <span className="text-red-500">*</span>
                   </label>
 
                   <div className="relative">
-
-                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <input
                       type="text"
@@ -601,13 +554,9 @@ export default function PostJobPage() {
                       placeholder="e.g. Mumbai, Maharashtra"
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
 
             {/* =================================================
@@ -615,9 +564,7 @@ export default function PostJobPage() {
             ================================================= */}
 
             <div className="border-t border-gray-100 pt-8">
-
               <div className="mb-5">
-
                 <h2 className="text-lg font-semibold">
                   Job Details
                 </h2>
@@ -625,51 +572,62 @@ export default function PostJobPage() {
                 <p className="mt-1 text-xs text-gray-500">
                   Tell students more about this opportunity.
                 </p>
-
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
-
-                {/* JOB TYPE */}
+                {/* =================================================
+                    JOB TYPE - FIXED MOBILE DROPDOWN
+                ================================================= */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Job Type
                   </label>
 
                   <div className="relative">
+                    {/* LEFT ICON */}
 
-                    <Clock3 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Clock3 className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <select
                       value={jobType}
                       onChange={(e) =>
                         setJobType(e.target.value)
                       }
-                      className="h-11 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-sm outline-none focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
+                      className="h-11 w-full appearance-none rounded-lg border border-gray-200 bg-white pl-11 pr-10 text-sm text-[#24163a] outline-none transition focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     >
-                      <option>Internship</option>
-                      <option>Full Time</option>
-                      <option>Part Time</option>
-                      <option>Contract</option>
+                      <option value="Internship">
+                        Internship
+                      </option>
+
+                      <option value="Full Time">
+                        Full Time
+                      </option>
+
+                      <option value="Part Time">
+                        Part Time
+                      </option>
+
+                      <option value="Contract">
+                        Contract
+                      </option>
                     </select>
 
-                  </div>
+                    {/* RIGHT ARROW */}
 
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                  </div>
                 </div>
 
                 {/* SALARY */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Salary / Stipend
                   </label>
 
                   <div className="relative">
-
-                    <IndianRupee className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <IndianRupee className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <input
                       type="text"
@@ -680,22 +638,18 @@ export default function PostJobPage() {
                       placeholder="e.g. ₹15,000 / month"
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
 
                 {/* EXPERIENCE */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Experience
                   </label>
 
                   <div className="relative">
-
-                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Briefcase className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
                     <input
                       type="text"
@@ -706,15 +660,12 @@ export default function PostJobPage() {
                       placeholder="e.g. 0-1 years"
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
 
                 {/* SKILLS */}
 
                 <div>
-
                   <label className="mb-2 block text-sm font-medium">
                     Required Skills
                   </label>
@@ -732,23 +683,18 @@ export default function PostJobPage() {
                   <p className="mt-1.5 text-xs text-gray-400">
                     Separate multiple skills using commas.
                   </p>
-
                 </div>
 
                 {/* DESCRIPTION */}
 
                 <div className="sm:col-span-2">
-
                   <label className="mb-2 block text-sm font-medium">
                     Job Description{" "}
-                    <span className="text-red-500">
-                      *
-                    </span>
+                    <span className="text-red-500">*</span>
                   </label>
 
                   <div className="relative">
-
-                    <FileText className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
+                    <FileText className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
 
                     <textarea
                       rows={7}
@@ -759,13 +705,9 @@ export default function PostJobPage() {
                       placeholder="Describe the role, responsibilities and requirements..."
                       className="w-full resize-none rounded-lg border border-gray-200 pl-10 pr-4 pt-3 text-sm outline-none placeholder:text-gray-400 focus:border-[#6d28d9] focus:ring-2 focus:ring-purple-100"
                     />
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
 
             {/* =================================================
@@ -773,7 +715,6 @@ export default function PostJobPage() {
             ================================================= */}
 
             <div className="mt-8 flex flex-col-reverse gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:justify-end">
-
               <Link
                 href="/recruiter"
                 className="inline-flex h-11 items-center justify-center rounded-lg border border-gray-200 px-6 text-sm font-semibold text-gray-600 hover:bg-gray-50"
@@ -786,7 +727,6 @@ export default function PostJobPage() {
                 disabled={loading}
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#32145f] px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-[#421b7a] disabled:cursor-not-allowed disabled:opacity-60"
               >
-
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -798,17 +738,11 @@ export default function PostJobPage() {
                     Post Job
                   </>
                 )}
-
               </button>
-
             </div>
-
           </div>
-
         </form>
-
       </div>
-
     </main>
   );
 }
