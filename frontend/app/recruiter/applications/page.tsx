@@ -19,7 +19,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://campushire-xl9m.onrender.com";
 
 type RecruiterUser = {
   id: string;

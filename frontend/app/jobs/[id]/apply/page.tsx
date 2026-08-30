@@ -132,7 +132,7 @@ export default function ApplyPage() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:3000/jobs/${jobId}`
+        `https://campushire-xl9m.onrender.com/jobs/${jobId}`
       );
 
       if (!response.ok) {
@@ -231,7 +231,7 @@ export default function ApplyPage() {
       formData.append("status", "Applied");
 
       const response = await fetch(
-        "http://localhost:3000/applications",
+        "https://campushire-xl9m.onrender.com/applications",
         {
           method: "POST",
           body: formData,

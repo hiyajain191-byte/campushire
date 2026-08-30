@@ -157,7 +157,7 @@ export default function ApplicationsPage() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/applications/user?email=${encodeURIComponent(
+        `https://campushire-xl9m.onrender.com/applications/user?email=${encodeURIComponent(
           loggedInUser.email
         )}`
       );

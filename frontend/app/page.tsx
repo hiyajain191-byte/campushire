@@ -31,18 +31,6 @@ type Job = {
     maxYears?: number;
   };
 
-  /*
-   * Dataset jobs:
-   * salary: {
-   *   minLpa: 4,
-   *   maxLpa: 8
-   * }
-   *
-   * Recruiter jobs:
-   * salary: 10000
-   * OR
-   * salary: "10000"
-   */
   salary?:
     | {
         minLpa?: number;
@@ -98,10 +86,7 @@ export default function HomePage() {
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [jobsError, setJobsError] = useState("");
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    []
-  );
-
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const [search, setSearch] = useState("");
@@ -158,6 +143,10 @@ export default function HomePage() {
     });
   }
 
+  // =========================
+  // HERO MOUSE EFFECT
+  // =========================
+
   function handleHeroMouseMove(
     e: React.MouseEvent<HTMLDivElement>
   ) {
@@ -207,8 +196,12 @@ export default function HomePage() {
       setLoadingJobs(true);
       setJobsError("");
 
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL ||
+        "https://campushire-xl9m.onrender.com";
+
       const response = await fetch(
-        "http://localhost:3000/jobs"
+        `${API_URL}/jobs`
       );
 
       if (!response.ok) {
@@ -259,9 +252,7 @@ export default function HomePage() {
   function toggleCategory(category: string) {
     setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(
-            (item) => item !== category
-          )
+        ? prev.filter((item) => item !== category)
         : [...prev, category]
     );
 
@@ -271,9 +262,7 @@ export default function HomePage() {
   function toggleLocation(location: string) {
     setSelectedLocations((prev) =>
       prev.includes(location)
-        ? prev.filter(
-            (item) => item !== location
-          )
+        ? prev.filter((item) => item !== location)
         : [...prev, location]
     );
 
@@ -322,9 +311,7 @@ export default function HomePage() {
         ?.toLowerCase()
         .includes(searchValue) ||
       job.skills?.some((skill) =>
-        skill
-          .toLowerCase()
-          .includes(searchValue)
+        skill.toLowerCase().includes(searchValue)
       );
 
     const matchesSearchLocation =
@@ -350,9 +337,7 @@ export default function HomePage() {
             ?.toLowerCase()
             .includes(value) ||
           job.skills?.some((skill) =>
-            skill
-              .toLowerCase()
-              .includes(value)
+            skill.toLowerCase().includes(value)
           )
         );
       });
@@ -391,8 +376,7 @@ export default function HomePage() {
   const totalPages = Math.max(
     1,
     Math.ceil(
-      filteredJobs.length /
-        JOBS_PER_PAGE
+      filteredJobs.length / JOBS_PER_PAGE
     )
   );
 
@@ -430,7 +414,6 @@ export default function HomePage() {
   function formatSalary(job: Job) {
     const salary = job.salary;
 
-    // No salary
     if (
       salary === undefined ||
       salary === null ||
@@ -439,10 +422,8 @@ export default function HomePage() {
       return "Salary not specified";
     }
 
-    // =========================
-    // RECRUITER JOB
+    // Recruiter job
     // salary: 10000
-    // =========================
 
     if (typeof salary === "number") {
       if (salary <= 0) {
@@ -452,10 +433,8 @@ export default function HomePage() {
       return `₹${salary.toLocaleString("en-IN")}`;
     }
 
-    // =========================
-    // RECRUITER JOB
+    // Recruiter job
     // salary: "10000"
-    // =========================
 
     if (typeof salary === "string") {
       const trimmedSalary =
@@ -474,9 +453,7 @@ export default function HomePage() {
         );
 
       if (
-        !Number.isNaN(
-          numericSalary
-        ) &&
+        !Number.isNaN(numericSalary) &&
         numericSalary > 0
       ) {
         return `₹${numericSalary.toLocaleString(
@@ -487,13 +464,11 @@ export default function HomePage() {
       return `₹${trimmedSalary}`;
     }
 
-    // =========================
-    // DATASET JOB
+    // Dataset job
     // salary: {
     //   minLpa: 4,
     //   maxLpa: 8
     // }
-    // =========================
 
     const min =
       salary.minLpa ?? 0;
@@ -683,6 +658,7 @@ export default function HomePage() {
 
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 transition-colors">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+
           {/* LOGO */}
 
           <Link
@@ -705,6 +681,7 @@ export default function HomePage() {
           {/* DESKTOP NAV */}
 
           <nav className="hidden items-center gap-6 text-sm md:flex">
+
             {/* STUDENT NAV */}
 
             {isStudent && (
@@ -839,7 +816,7 @@ export default function HomePage() {
               )}
             </button>
 
-            {/* DARK MODE TOGGLE (MOBILE) */}
+            {/* DARK MODE TOGGLE */}
 
             <button
               onClick={toggleDarkMode}
@@ -866,6 +843,7 @@ export default function HomePage() {
         {menuOpen && (
           <div className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 md:hidden">
             <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 text-sm">
+
               {/* STUDENT MOBILE */}
 
               {isStudent && (
@@ -1120,6 +1098,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[210px_1fr]">
+
           {/* FILTER SIDEBAR */}
 
           <aside className="flex flex-col gap-8">

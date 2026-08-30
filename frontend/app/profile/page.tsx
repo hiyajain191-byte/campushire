@@ -297,7 +297,7 @@ export default function ResumeAnalysisPage() {
   async function getRecommendedJobs(userSkills: string[]) {
     try {
       const response = await fetch(
-        "http://localhost:3000/jobs"
+        "https://campushire-xl9m.onrender.com/jobs"
       );
 
       if (!response.ok) {
@@ -419,7 +419,7 @@ export default function ResumeAnalysisPage() {
         formData.append("file", resume);
 
         const response = await fetch(
-          "http://localhost:3000/submissions",
+          "https://campushire-xl9m.onrender.com/submissions",
           {
             method: "POST",
             headers: {

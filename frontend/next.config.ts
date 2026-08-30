@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:3000/:path*",
+        destination: "https://campushire-xl9m.onrender.com/:path*",
       },
     ];
   },

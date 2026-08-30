@@ -11,7 +11,7 @@ npm run start:dev   # dev mode with auto-reload
 npm run build && npm run start:prod
 ```
 
-Server runs on `http://localhost:3000` by default (override with `PORT` env var).
+Server runs on `https://campushire-xl9m.onrender.com` by default (override with `PORT` env var).
 
 ## Endpoints
 

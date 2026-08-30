@@ -122,7 +122,7 @@ export default function JobDetailsPage() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:3000/jobs/${jobId}`,
+        `https://campushire-xl9m.onrender.com/jobs/${jobId}`,
         {
           cache: "no-store",
         }
