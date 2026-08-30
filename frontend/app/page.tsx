@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type {
+  MouseEvent,
+  KeyboardEvent,
+} from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -79,39 +83,67 @@ const locations = [
 ];
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  // =========================
+  // STATES
+  // =========================
 
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loadingJobs, setLoadingJobs] = useState(true);
-  const [jobsError, setJobsError] = useState("");
+  const [menuOpen, setMenuOpen] =
+    useState(false);
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] =
+    useState(false);
 
-  const [search, setSearch] = useState("");
-  const [searchLocation, setSearchLocation] = useState("");
+  const [user, setUser] =
+    useState<User | null>(null);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [jobs, setJobs] =
+    useState<Job[]>([]);
+
+  const [loadingJobs, setLoadingJobs] =
+    useState(true);
+
+  const [jobsError, setJobsError] =
+    useState("");
+
+  const [selectedCategories, setSelectedCategories] =
+    useState<string[]>([]);
+
+  const [selectedLocations, setSelectedLocations] =
+    useState<string[]>([]);
+
+  const [search, setSearch] =
+    useState("");
+
+  const [searchLocation, setSearchLocation] =
+    useState("");
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
 
   const [heroMouse, setHeroMouse] = useState({
     x: 0,
     y: 0,
   });
 
+  const [darkMode, setDarkMode] =
+    useState(false);
+
   // =========================
   // DARK MODE
   // =========================
 
-  const [darkMode, setDarkMode] = useState(false);
-
   useEffect(() => {
-    const savedTheme = localStorage.getItem("campushire_theme");
+    const savedTheme =
+      localStorage.getItem(
+        "campushire_theme"
+      );
 
     const prefersDark =
       typeof window !== "undefined" &&
       window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
+      window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
 
     const shouldUseDark = savedTheme
       ? savedTheme === "dark"
@@ -148,15 +180,22 @@ export default function HomePage() {
   // =========================
 
   function handleHeroMouseMove(
-    e: React.MouseEvent<HTMLDivElement>
+    e: MouseEvent<HTMLDivElement>
   ) {
-    const rect = e.currentTarget.getBoundingClientRect();
+    const rect =
+      e.currentTarget.getBoundingClientRect();
 
     const x =
-      ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      ((e.clientX - rect.left) /
+        rect.width -
+        0.5) *
+      2;
 
     const y =
-      ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      ((e.clientY - rect.top) /
+        rect.height -
+        0.5) *
+      2;
 
     setHeroMouse({
       x,
@@ -170,15 +209,20 @@ export default function HomePage() {
 
   useEffect(() => {
     const savedUser =
-      localStorage.getItem("campushire_user");
+      localStorage.getItem(
+        "campushire_user"
+      );
 
     if (savedUser) {
       try {
-        const parsedUser: User = JSON.parse(savedUser);
+        const parsedUser: User =
+          JSON.parse(savedUser);
 
         setUser(parsedUser);
       } catch {
-        localStorage.removeItem("campushire_user");
+        localStorage.removeItem(
+          "campushire_user"
+        );
       }
     }
   }, []);
@@ -205,18 +249,21 @@ export default function HomePage() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch jobs");
+        throw new Error(
+          "Failed to fetch jobs"
+        );
       }
 
       const data = await response.json();
 
-      const jobList: Job[] = Array.isArray(data)
-        ? data
-        : Array.isArray(data.jobs)
-        ? data.jobs
-        : Array.isArray(data.data)
-        ? data.data
-        : [];
+      const jobList: Job[] =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data.jobs)
+          ? data.jobs
+          : Array.isArray(data.data)
+          ? data.data
+          : [];
 
       setJobs(jobList);
     } catch (error) {
@@ -238,8 +285,13 @@ export default function HomePage() {
   // =========================
 
   function handleLogout() {
-    localStorage.removeItem("campushire_user");
-    localStorage.removeItem("campushire_token");
+    localStorage.removeItem(
+      "campushire_user"
+    );
+
+    localStorage.removeItem(
+      "campushire_token"
+    );
 
     setUser(null);
     setMenuOpen(false);
@@ -249,20 +301,28 @@ export default function HomePage() {
   // FILTERS
   // =========================
 
-  function toggleCategory(category: string) {
+  function toggleCategory(
+    category: string
+  ) {
     setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter((item) => item !== category)
+        ? prev.filter(
+            (item) => item !== category
+          )
         : [...prev, category]
     );
 
     setCurrentPage(1);
   }
 
-  function toggleLocation(location: string) {
+  function toggleLocation(
+    location: string
+  ) {
     setSelectedLocations((prev) =>
       prev.includes(location)
-        ? prev.filter((item) => item !== location)
+        ? prev.filter(
+            (item) => item !== location
+          )
         : [...prev, location]
     );
 
@@ -278,7 +338,7 @@ export default function HomePage() {
   }
 
   function handleSearchKeyDown(
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: KeyboardEvent<HTMLInputElement>
   ) {
     if (e.key === "Enter") {
       handleSearch();
@@ -289,85 +349,97 @@ export default function HomePage() {
   // FILTER JOBS
   // =========================
 
-  const filteredJobs = jobs.filter((job) => {
-    const searchValue =
-      search.toLowerCase().trim();
+  const filteredJobs = jobs.filter(
+    (job) => {
+      const searchValue =
+        search.toLowerCase().trim();
 
-    const locationValue =
-      searchLocation.toLowerCase().trim();
+      const locationValue =
+        searchLocation
+          .toLowerCase()
+          .trim();
 
-    const matchesSearch =
-      !searchValue ||
-      job.title
-        ?.toLowerCase()
-        .includes(searchValue) ||
-      job.company
-        ?.toLowerCase()
-        .includes(searchValue) ||
-      job.roleCategory
-        ?.toLowerCase()
-        .includes(searchValue) ||
-      job.description
-        ?.toLowerCase()
-        .includes(searchValue) ||
-      job.skills?.some((skill) =>
-        skill.toLowerCase().includes(searchValue)
+      const matchesSearch =
+        !searchValue ||
+        job.title
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        job.company
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        job.roleCategory
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        job.description
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        job.skills?.some((skill) =>
+          skill
+            .toLowerCase()
+            .includes(searchValue)
+        );
+
+      const matchesSearchLocation =
+        !locationValue ||
+        job.location
+          ?.toLowerCase()
+          .includes(locationValue) ||
+        job.city
+          ?.toLowerCase()
+          .includes(locationValue);
+
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.some(
+          (category) => {
+            const value =
+              category.toLowerCase();
+
+            return (
+              job.title
+                ?.toLowerCase()
+                .includes(value) ||
+              job.roleCategory
+                ?.toLowerCase()
+                .includes(value) ||
+              job.skills?.some((skill) =>
+                skill
+                  .toLowerCase()
+                  .includes(value)
+              )
+            );
+          }
+        );
+
+      const matchesLocation =
+        selectedLocations.length === 0 ||
+        selectedLocations.some(
+          (location) => {
+            const value =
+              location.toLowerCase();
+
+            return (
+              job.location
+                ?.toLowerCase()
+                .includes(value) ||
+              job.city
+                ?.toLowerCase()
+                .includes(value) ||
+              job.workMode
+                ?.toLowerCase()
+                .includes(value)
+            );
+          }
+        );
+
+      return (
+        matchesSearch &&
+        matchesSearchLocation &&
+        matchesCategory &&
+        matchesLocation
       );
-
-    const matchesSearchLocation =
-      !locationValue ||
-      job.location
-        ?.toLowerCase()
-        .includes(locationValue) ||
-      job.city
-        ?.toLowerCase()
-        .includes(locationValue);
-
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.some((category) => {
-        const value =
-          category.toLowerCase();
-
-        return (
-          job.title
-            ?.toLowerCase()
-            .includes(value) ||
-          job.roleCategory
-            ?.toLowerCase()
-            .includes(value) ||
-          job.skills?.some((skill) =>
-            skill.toLowerCase().includes(value)
-          )
-        );
-      });
-
-    const matchesLocation =
-      selectedLocations.length === 0 ||
-      selectedLocations.some((location) => {
-        const value =
-          location.toLowerCase();
-
-        return (
-          job.location
-            ?.toLowerCase()
-            .includes(value) ||
-          job.city
-            ?.toLowerCase()
-            .includes(value) ||
-          job.workMode
-            ?.toLowerCase()
-            .includes(value)
-        );
-      });
-
-    return (
-      matchesSearch &&
-      matchesSearchLocation &&
-      matchesCategory &&
-      matchesLocation
-    );
-  });
+    }
+  );
 
   // =========================
   // PAGINATION
@@ -376,7 +448,8 @@ export default function HomePage() {
   const totalPages = Math.max(
     1,
     Math.ceil(
-      filteredJobs.length / JOBS_PER_PAGE
+      filteredJobs.length /
+        JOBS_PER_PAGE
     )
   );
 
@@ -422,19 +495,15 @@ export default function HomePage() {
       return "Salary not specified";
     }
 
-    // Recruiter job
-    // salary: 10000
-
     if (typeof salary === "number") {
       if (salary <= 0) {
         return "Salary not specified";
       }
 
-      return `₹${salary.toLocaleString("en-IN")}`;
+      return `₹${salary.toLocaleString(
+        "en-IN"
+      )}`;
     }
-
-    // Recruiter job
-    // salary: "10000"
 
     if (typeof salary === "string") {
       const trimmedSalary =
@@ -444,13 +513,9 @@ export default function HomePage() {
         return "Salary not specified";
       }
 
-      const numericSalary =
-        Number(
-          trimmedSalary.replace(
-            /,/g,
-            ""
-          )
-        );
+      const numericSalary = Number(
+        trimmedSalary.replace(/,/g, "")
+      );
 
       if (
         !Number.isNaN(numericSalary) &&
@@ -463,12 +528,6 @@ export default function HomePage() {
 
       return `₹${trimmedSalary}`;
     }
-
-    // Dataset job
-    // salary: {
-    //   minLpa: 4,
-    //   maxLpa: 8
-    // }
 
     const min =
       salary.minLpa ?? 0;
@@ -497,8 +556,17 @@ export default function HomePage() {
   const isStudent =
     user?.role === "student";
 
+  // =========================
+  // UI
+  // =========================
+
   return (
-    <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
+    <main className="min-h-screen bg-white text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
+
+      {/* =========================
+          ANIMATIONS
+      ========================= */}
+
       <style jsx>{`
         @keyframes fadeSlideUp {
           from {
@@ -656,7 +724,7 @@ export default function HomePage() {
           NAVBAR
       ========================= */}
 
-      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 transition-colors">
+      <header className="border-b border-slate-200 bg-white transition-colors dark:border-slate-800 dark:bg-slate-950">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
 
           {/* LOGO */}
@@ -682,8 +750,6 @@ export default function HomePage() {
 
           <nav className="hidden items-center gap-6 text-sm md:flex">
 
-            {/* STUDENT NAV */}
-
             {isStudent && (
               <>
                 <Link
@@ -708,8 +774,6 @@ export default function HomePage() {
                 </Link>
               </>
             )}
-
-            {/* RECRUITER NAV */}
 
             {isRecruiter && (
               <>
@@ -776,7 +840,7 @@ export default function HomePage() {
               </>
             )}
 
-            {/* DARK MODE TOGGLE */}
+            {/* DARK MODE */}
 
             <button
               onClick={toggleDarkMode}
@@ -816,8 +880,6 @@ export default function HomePage() {
               )}
             </button>
 
-            {/* DARK MODE TOGGLE */}
-
             <button
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"
@@ -843,8 +905,6 @@ export default function HomePage() {
         {menuOpen && (
           <div className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 md:hidden">
             <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 text-sm">
-
-              {/* STUDENT MOBILE */}
 
               {isStudent && (
                 <>
@@ -880,8 +940,6 @@ export default function HomePage() {
                 </>
               )}
 
-              {/* RECRUITER MOBILE */}
-
               {isRecruiter && (
                 <>
                   <Link
@@ -915,8 +973,6 @@ export default function HomePage() {
                   </Link>
                 </>
               )}
-
-              {/* USER */}
 
               {user ? (
                 <>
@@ -968,12 +1024,12 @@ export default function HomePage() {
           HERO
       ========================= */}
 
-      <section className="mx-auto max-w-6xl px-5 pt-10">
+      <section className="mx-auto max-w-6xl px-5 pt-8 sm:pt-10">
         <div
           onMouseMove={
             handleHeroMouseMove
           }
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-6 py-16 text-center md:py-20"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-5 py-12 text-center sm:px-6 sm:py-16 md:py-20"
         >
           <div
             className="glow-blob pointer-events-none absolute -left-10 -top-10 h-56 w-56 rounded-full bg-purple-500/20 blur-3xl"
@@ -998,7 +1054,7 @@ export default function HomePage() {
             }}
           />
 
-          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
+          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
             Find your next opportunity
           </h1>
 
@@ -1029,6 +1085,7 @@ export default function HomePage() {
           {/* SEARCH */}
 
           <div className="hero-animate hero-delay-3 search-glow relative mx-auto mt-8 flex max-w-2xl flex-col items-stretch gap-2 rounded-2xl bg-white p-2 shadow-lg sm:flex-row dark:bg-slate-900">
+
             <div className="flex flex-1 items-center gap-2.5 px-4 py-2.5">
               <Search className="h-4 w-4 shrink-0 text-slate-400" />
 
@@ -1085,7 +1142,8 @@ export default function HomePage() {
           JOB SECTION
       ========================= */}
 
-      <section className="mx-auto max-w-6xl px-5 py-16">
+      <section className="mx-auto max-w-6xl px-5 py-12 sm:py-16">
+
         <div className="mb-8">
           <h2 className="text-xl font-semibold md:text-2xl">
             Latest opportunities
@@ -1097,11 +1155,43 @@ export default function HomePage() {
           </p>
         </div>
 
+        {/* =========================
+            MOBILE FILTER BUTTON
+        ========================= */}
+
+        <div className="mb-6 lg:hidden">
+          <button
+            onClick={() =>
+              setFilterOpen(true)
+            }
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            <Search className="h-4 w-4" />
+
+            Filters
+
+            {(selectedCategories.length >
+              0 ||
+              selectedLocations.length >
+                0) && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-purple-900 px-1.5 text-[10px] text-white">
+                {selectedCategories.length +
+                  selectedLocations.length}
+              </span>
+            )}
+          </button>
+        </div>
+
         <div className="grid gap-10 lg:grid-cols-[210px_1fr]">
 
-          {/* FILTER SIDEBAR */}
+          {/* =========================
+              DESKTOP FILTER SIDEBAR
+          ========================= */}
 
-          <aside className="flex flex-col gap-8">
+          <aside className="hidden flex-col gap-8 lg:flex">
+
+            {/* CATEGORIES */}
+
             <div>
               <h3 className="mb-3 text-sm font-semibold">
                 Search by Categories
@@ -1133,6 +1223,8 @@ export default function HomePage() {
                 )}
               </div>
             </div>
+
+            {/* LOCATIONS */}
 
             <div>
               <h3 className="mb-3 text-sm font-semibold">
@@ -1167,9 +1259,140 @@ export default function HomePage() {
             </div>
           </aside>
 
-          {/* JOB LIST */}
+          {/* =========================
+              MOBILE FILTER DRAWER
+          ========================= */}
+
+          {filterOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+
+              {/* OVERLAY */}
+
+              <div
+                className="absolute inset-0 bg-black/40"
+                onClick={() =>
+                  setFilterOpen(false)
+                }
+              />
+
+              {/* DRAWER */}
+
+              <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-white p-6 shadow-xl dark:bg-slate-950">
+
+                {/* HEADER */}
+
+                <div className="mb-6 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold">
+                      Filters
+                    </h2>
+
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                      Refine your job search
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setFilterOpen(false)
+                    }
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700"
+                    aria-label="Close filters"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* CATEGORIES */}
+
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold">
+                    Search by Categories
+                  </h3>
+
+                  <div className="flex flex-col gap-3">
+                    {categories.map(
+                      (category) => (
+                        <label
+                          key={category}
+                          className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedCategories.includes(
+                              category
+                            )}
+                            onChange={() =>
+                              toggleCategory(
+                                category
+                              )
+                            }
+                            className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                          />
+
+                          {category}
+                        </label>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* LOCATIONS */}
+
+                <div className="mt-8">
+                  <h3 className="mb-3 text-sm font-semibold">
+                    Search by Location
+                  </h3>
+
+                  <div className="flex flex-col gap-3">
+                    {locations.map(
+                      (location) => (
+                        <label
+                          key={location}
+                          className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedLocations.includes(
+                              location
+                            )}
+                            onChange={() =>
+                              toggleLocation(
+                                location
+                              )
+                            }
+                            className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                          />
+
+                          {location}
+                        </label>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* APPLY */}
+
+                <button
+                  onClick={() =>
+                    setFilterOpen(false)
+                  }
+                  className="mt-8 w-full rounded-xl bg-purple-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-800"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* =========================
+              JOB LIST
+          ========================= */}
 
           <div className="flex flex-col gap-5">
+
+            {/* LOADING */}
+
             {loadingJobs && (
               <div className="py-20 text-center">
                 <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple-900 dark:text-purple-400" />
@@ -1179,6 +1402,8 @@ export default function HomePage() {
                 </p>
               </div>
             )}
+
+            {/* ERROR */}
 
             {!loadingJobs &&
               jobsError && (
@@ -1198,18 +1423,24 @@ export default function HomePage() {
                 </div>
               )}
 
+            {/* JOBS */}
+
             {!loadingJobs &&
               !jobsError &&
               paginatedJobs.length >
                 0 && (
                 <div className="flex flex-col gap-4">
+
                   {paginatedJobs.map(
                     (job) => (
                       <div
                         key={job._id}
-                        className="rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+                        className="rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6 dark:border-slate-800 dark:bg-slate-900"
                       >
-                        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+
+                        {/* TITLE + SALARY */}
+
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <div className="min-w-0">
                             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                               {job.title}
@@ -1221,8 +1452,6 @@ export default function HomePage() {
                             </p>
                           </div>
 
-                          {/* SALARY */}
-
                           <div className="shrink-0">
                             <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                               {formatSalary(
@@ -1232,7 +1461,10 @@ export default function HomePage() {
                           </div>
                         </div>
 
+                        {/* TAGS */}
+
                         <div className="mt-4 flex flex-wrap items-center gap-2">
+
                           {job.location && (
                             <span className="flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-900 dark:bg-purple-950 dark:text-purple-300">
                               <MapPin className="h-3.5 w-3.5" />
@@ -1268,10 +1500,14 @@ export default function HomePage() {
                           )}
                         </div>
 
+                        {/* DESCRIPTION */}
+
                         <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                           {job.description ||
                             "No detailed description available."}
                         </p>
+
+                        {/* SKILLS */}
 
                         {job.skills &&
                           job.skills.length >
@@ -1301,7 +1537,10 @@ export default function HomePage() {
                             </div>
                           )}
 
+                        {/* BOTTOM */}
+
                         <div className="mt-5 flex flex-col gap-4 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+
                           <span className="flex items-center gap-1.5 text-xs text-slate-400">
                             <Clock className="h-3.5 w-3.5" />
 
@@ -1309,20 +1548,19 @@ export default function HomePage() {
                               "Recently"}
                           </span>
 
-                          <div className="flex gap-2">
+                          <div className="flex w-full gap-2 sm:w-auto">
+
                             <Link
                               href={`/jobs/${job._id}`}
-                              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                              className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 sm:flex-none dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                             >
                               Learn more
                             </Link>
 
-                            {/* ONLY STUDENTS CAN APPLY */}
-
                             {isStudent && (
                               <Link
                                 href={`/jobs/${job._id}/apply`}
-                                className="rounded-full bg-purple-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-800"
+                                className="flex-1 rounded-full bg-purple-900 px-5 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-purple-800 sm:flex-none"
                               >
                                 Apply now
                               </Link>
@@ -1334,6 +1572,8 @@ export default function HomePage() {
                   )}
                 </div>
               )}
+
+            {/* NO JOBS */}
 
             {!loadingJobs &&
               !jobsError &&
@@ -1353,11 +1593,14 @@ export default function HomePage() {
                 </div>
               )}
 
+            {/* PAGINATION */}
+
             {!loadingJobs &&
               !jobsError &&
               filteredJobs.length >
                 0 && (
-                <div className="mt-4 flex items-center justify-center gap-1.5">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
+
                   <button
                     onClick={() =>
                       goToPage(
@@ -1430,7 +1673,8 @@ export default function HomePage() {
       {!isRecruiter && (
         <section className="border-y border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
           <div className="mx-auto max-w-6xl px-5 py-14">
-            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-950">
+            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-950">
+
               <div>
                 <h2 className="text-xl font-semibold md:text-2xl">
                   Ready for your next
