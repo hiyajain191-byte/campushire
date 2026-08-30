@@ -14,41 +14,38 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+type Experience =
+  | string
+  | {
+      minYears?: number;
+      maxYears?: number;
+    };
+
+type Salary =
+  | string
+  | number
+  | {
+      minLpa?: number;
+      maxLpa?: number;
+    };
+
 type Job = {
   _id: string;
   externalJobId?: number;
-
   title: string;
   company?: string;
-
   location?: string;
   city?: string;
-
   roleCategory?: string;
-
-  experience?: string;
-
-  salary?:
-    | string
-    | number
-    | {
-        minLpa?: number;
-        maxLpa?: number;
-      };
-
+  experience?: Experience;
+  salary?: Salary;
   skills?: string[];
-
   description?: string;
-
   postedDate?: string;
   createdAt?: string;
-
   workMode?: string;
-
   jobUrl?: string;
-
   isFresherFriendly?: boolean;
-
   jobType?: string;
 };
 
@@ -61,11 +58,6 @@ export default function JobDetailsPage() {
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  /* =========================
-     DARK MODE
-  ========================= */
-
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -76,9 +68,10 @@ export default function JobDetailsPage() {
       window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    const shouldUseDark = savedTheme
-      ? savedTheme === "dark"
-      : prefersDark;
+    const shouldUseDark =
+      savedTheme !== null
+        ? savedTheme === "dark"
+        : prefersDark;
 
     setDarkMode(shouldUseDark);
 
@@ -89,8 +82,8 @@ export default function JobDetailsPage() {
   }, []);
 
   function toggleDarkMode() {
-    setDarkMode((prev) => {
-      const next = !prev;
+    setDarkMode((current) => {
+      const next = !current;
 
       document.documentElement.classList.toggle(
         "dark",
@@ -106,75 +99,94 @@ export default function JobDetailsPage() {
     });
   }
 
-  /* =========================
-     FETCH JOB
-  ========================= */
-
   useEffect(() => {
     if (!jobId) return;
 
-    fetchJob();
+    async function loadJob() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(
+          `https://campushire-xl9m.onrender.com/jobs/${jobId}`,
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Job not found");
+        }
+
+        const data: Job = await response.json();
+
+        console.log("JOB DETAILS:", data);
+        console.log("EXPERIENCE:", data.experience);
+
+        setJob(data);
+      } catch (err) {
+        console.error("Failed to fetch job:", err);
+
+        setError(
+          "Unable to load this job. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadJob();
   }, [jobId]);
 
-  async function fetchJob() {
-    try {
-      setLoading(true);
-      setError("");
+  function formatExperience(
+    experience?: Experience
+  ): string {
+    if (!experience) {
+      return "Not specified";
+    }
 
-      const response = await fetch(
-        `https://campushire-xl9m.onrender.com/jobs/${jobId}`,
-        {
-          cache: "no-store",
-        }
-      );
+    if (typeof experience === "string") {
+      const value = experience.trim();
 
-      if (!response.ok) {
-        throw new Error("Job not found");
+      return value || "Not specified";
+    }
+
+    const min = experience.minYears;
+    const max = experience.maxYears;
+
+    if (
+      typeof min === "number" &&
+      typeof max === "number"
+    ) {
+      if (min === max) {
+        return `${min} year${min === 1 ? "" : "s"}`;
       }
 
-      const data = await response.json();
-
-      console.log("JOB DETAILS:", data);
-      console.log("EXPERIENCE:", data?.experience);
-
-      setJob(data);
-    } catch (error) {
-      console.error(
-        "Failed to fetch job:",
-        error
-      );
-
-      setError(
-        "Unable to load this job. Please make sure the backend is running."
-      );
-    } finally {
-      setLoading(false);
+      return `${min}–${max} years`;
     }
+
+    if (typeof min === "number") {
+      return `${min}+ years`;
+    }
+
+    if (typeof max === "number") {
+      return `Up to ${max} years`;
+    }
+
+    return "Not specified";
   }
 
-  /* =========================
-     SALARY
-  ========================= */
-
-  function formatSalary() {
-    if (!job?.salary) {
+  function formatSalary(
+    salary?: Salary
+  ): string {
+    if (!salary) {
       return "Salary not specified";
     }
 
-    const salary = job.salary;
-
-    // STRING SALARY
     if (typeof salary === "string") {
-      const value = salary.trim();
-
-      if (!value) {
-        return "Salary not specified";
-      }
-
-      return value;
+      return salary.trim() || "Salary not specified";
     }
 
-    // NUMBER SALARY
     if (
       typeof salary === "number" &&
       Number.isFinite(salary) &&
@@ -183,7 +195,6 @@ export default function JobDetailsPage() {
       return `₹${salary}`;
     }
 
-    // OBJECT SALARY
     if (
       typeof salary === "object" &&
       salary !== null
@@ -191,7 +202,6 @@ export default function JobDetailsPage() {
       const min = salary.minLpa;
       const max = salary.maxLpa;
 
-      // Both available
       if (
         typeof min === "number" &&
         typeof max === "number" &&
@@ -201,7 +211,6 @@ export default function JobDetailsPage() {
         return `₹${min}–${max} LPA`;
       }
 
-      // Only minimum
       if (
         typeof min === "number" &&
         min > 0
@@ -209,7 +218,6 @@ export default function JobDetailsPage() {
         return `From ₹${min} LPA`;
       }
 
-      // Only maximum
       if (
         typeof max === "number" &&
         max > 0
@@ -221,33 +229,11 @@ export default function JobDetailsPage() {
     return "Salary not specified";
   }
 
-  /* =========================
-     EXPERIENCE
-  ========================= */
-
-  function formatExperience() {
-    const experience = job?.experience;
-
-    if (
-      typeof experience === "string" &&
-      experience.trim()
-    ) {
-      return experience.trim();
-    }
-
-    return "Not specified";
-  }
-
-  /* =========================
-     POSTED DATE
-  ========================= */
-
-  function formatPostedDate() {
+  function formatPostedDate(): string {
     if (!job) {
       return "Recently";
     }
 
-    // Existing dataset postedDate
     if (
       typeof job.postedDate === "string" &&
       job.postedDate.trim()
@@ -255,18 +241,11 @@ export default function JobDetailsPage() {
       return job.postedDate.trim();
     }
 
-    // createdAt fallback
     if (job.createdAt) {
-      const parsedDate = new Date(
-        job.createdAt
-      );
+      const date = new Date(job.createdAt);
 
-      if (
-        !Number.isNaN(
-          parsedDate.getTime()
-        )
-      ) {
-        return parsedDate.toLocaleDateString(
+      if (!Number.isNaN(date.getTime())) {
+        return date.toLocaleDateString(
           "en-IN",
           {
             day: "numeric",
@@ -280,13 +259,10 @@ export default function JobDetailsPage() {
     return "Recently";
   }
 
-  /* =========================
-     DARK MODE TOGGLE (shared markup)
-  ========================= */
-
   function DarkModeToggleButton() {
     return (
       <button
+        type="button"
         onClick={toggleDarkMode}
         aria-label="Toggle dark mode"
         className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
@@ -306,41 +282,26 @@ export default function JobDetailsPage() {
     );
   }
 
-  /* =========================
-     LOADING
-  ========================= */
-
   if (loading) {
     return (
-      <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
-
+      <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <div className="mx-auto max-w-5xl px-5 py-20 text-center">
-
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple-900 dark:text-purple-400" />
 
           <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
             Loading job details...
           </p>
-
         </div>
-
       </main>
     );
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-
   if (error || !job) {
     return (
-      <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
-
+      <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <div className="mx-auto max-w-5xl px-5 py-20">
-
           <div className="rounded-2xl border border-red-200 bg-red-50 p-10 text-center dark:border-red-900 dark:bg-red-950">
-
-            <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+            <h1 className="text-xl font-semibold">
               Job not found
             </h1>
 
@@ -354,48 +315,41 @@ export default function JobDetailsPage() {
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-purple-900 px-6 py-3 text-sm font-medium text-white hover:bg-purple-800"
             >
               <ArrowLeft className="h-4 w-4" />
-
               Back to jobs
             </Link>
-
           </div>
-
         </div>
-
       </main>
     );
   }
 
-  /* =========================
-     MAIN
-  ========================= */
+  const experienceText = formatExperience(
+    job.experience
+  );
+
+  const salaryText = formatSalary(
+    job.salary
+  );
+
+  const postedText = formatPostedDate();
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
-
-      {/* =========================
-          NAVBAR
-      ========================= */}
+    <main className="min-h-screen bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
 
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
 
           <Link
             href="/"
             className="flex items-center gap-2"
           >
-
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-900">
-
               <Briefcase className="h-4 w-4 text-white" />
-
             </div>
 
             <span className="text-lg font-bold">
               CampusHire
             </span>
-
           </Link>
 
           <div className="flex items-center gap-4">
@@ -407,46 +361,30 @@ export default function JobDetailsPage() {
               Find Jobs
             </Link>
 
-            {/* DARK MODE TOGGLE */}
-
             <DarkModeToggleButton />
 
           </div>
-
         </div>
-
       </header>
-
-      {/* =========================
-          CONTENT
-      ========================= */}
 
       <section className="mx-auto max-w-5xl px-5 py-10">
 
-        {/* BACK */}
-
         <button
+          type="button"
           onClick={() => router.back()}
           className="mb-6 flex items-center gap-2 text-sm text-slate-500 hover:text-purple-900 dark:text-slate-400 dark:hover:text-purple-300"
         >
-
           <ArrowLeft className="h-4 w-4" />
-
           Back to jobs
-
         </button>
 
-        {/* =========================
-            JOB HEADER
-        ========================= */}
-
-        <div className="rounded-3xl border border-slate-200 bg-white p-7 md:p-10 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-3xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900 md:p-10">
 
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
 
-            <div>
+            <div className="min-w-0">
 
-              <h1 className="text-2xl font-bold tracking-tight md:text-4xl dark:text-slate-100">
+              <h1 className="text-2xl font-bold tracking-tight md:text-4xl">
                 {job.title}
               </h1>
 
@@ -455,17 +393,12 @@ export default function JobDetailsPage() {
                   "Company not specified"}
               </p>
 
-              {/* TAGS */}
-
               <div className="mt-5 flex flex-wrap gap-3">
 
                 {job.location && (
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-sm text-purple-900 dark:bg-purple-950 dark:text-purple-300">
-
                     <MapPin className="h-4 w-4" />
-
                     {job.location}
-
                   </span>
                 )}
 
@@ -483,38 +416,24 @@ export default function JobDetailsPage() {
 
                 {job.isFresherFriendly && (
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1.5 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-
                     <CheckCircle2 className="h-4 w-4" />
-
                     Fresher Friendly
-
                   </span>
                 )}
 
               </div>
-
             </div>
-
-            {/* APPLY */}
 
             <Link
               href={`/apply/${job._id}`}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-purple-900 px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-purple-800"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-purple-900 px-7 py-3 text-sm font-semibold text-white hover:bg-purple-800"
             >
-
               Apply Now
-
               <ArrowRight className="h-4 w-4" />
-
             </Link>
 
           </div>
-
         </div>
-
-        {/* =========================
-            JOB INFO
-        ========================= */}
 
         <div className="mt-6 grid gap-5 md:grid-cols-3">
 
@@ -523,24 +442,15 @@ export default function JobDetailsPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
 
             <div className="flex items-center gap-2 text-slate-400">
-
               <Briefcase className="h-4 w-4" />
 
               <span className="text-xs uppercase tracking-wide">
                 Experience
               </span>
-
             </div>
 
-            <p
-              className={`mt-2 font-semibold ${
-                formatExperience() ===
-                "Not specified"
-                  ? "text-slate-500 dark:text-slate-400"
-                  : "text-slate-900 dark:text-slate-100"
-              }`}
-            >
-              {formatExperience()}
+            <p className="mt-2 font-semibold text-slate-900 dark:text-slate-100">
+              {experienceText}
             </p>
 
           </div>
@@ -550,24 +460,15 @@ export default function JobDetailsPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
 
             <div className="flex items-center gap-2 text-slate-400">
-
               <IndianRupee className="h-4 w-4" />
 
               <span className="text-xs uppercase tracking-wide">
                 Salary
               </span>
-
             </div>
 
-            <p
-              className={`mt-2 font-semibold ${
-                formatSalary() ===
-                "Salary not specified"
-                  ? "text-slate-500 dark:text-slate-400"
-                  : "text-slate-900 dark:text-slate-100"
-              }`}
-            >
-              {formatSalary()}
+            <p className="mt-2 font-semibold text-slate-900 dark:text-slate-100">
+              {salaryText}
             </p>
 
           </div>
@@ -577,30 +478,26 @@ export default function JobDetailsPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
 
             <div className="flex items-center gap-2 text-slate-400">
-
               <Clock className="h-4 w-4" />
 
               <span className="text-xs uppercase tracking-wide">
                 Posted
               </span>
-
             </div>
 
-            <p className="mt-2 font-semibold dark:text-slate-100">
-              {formatPostedDate()}
+            <p className="mt-2 font-semibold text-slate-900 dark:text-slate-100">
+              {postedText}
             </p>
 
           </div>
 
         </div>
 
-        {/* =========================
-            DESCRIPTION
-        ========================= */}
+        {/* DESCRIPTION */}
 
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-7 md:p-8 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900 md:p-8">
 
-          <h2 className="text-xl font-semibold dark:text-slate-100">
+          <h2 className="text-xl font-semibold">
             Job Description
           </h2>
 
@@ -611,15 +508,13 @@ export default function JobDetailsPage() {
 
         </div>
 
-        {/* =========================
-            SKILLS
-        ========================= */}
+        {/* SKILLS */}
 
-        {job.skills &&
+        {Array.isArray(job.skills) &&
           job.skills.length > 0 && (
-            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-7 md:p-8 dark:border-slate-800 dark:bg-slate-900">
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900 md:p-8">
 
-              <h2 className="text-xl font-semibold dark:text-slate-100">
+              <h2 className="text-xl font-semibold">
                 Required Skills
               </h2>
 
@@ -641,9 +536,7 @@ export default function JobDetailsPage() {
             </div>
           )}
 
-        {/* =========================
-            APPLY CTA
-        ========================= */}
+        {/* APPLY CTA */}
 
         <div className="mt-6 flex flex-col gap-5 rounded-2xl bg-purple-900 p-7 md:flex-row md:items-center md:justify-between md:p-8">
 
@@ -662,22 +555,15 @@ export default function JobDetailsPage() {
 
           <Link
             href={`/apply/${job._id}`}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-purple-900 transition-colors hover:bg-purple-50"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-purple-900 hover:bg-purple-50"
           >
-
             Apply Now
-
             <ArrowRight className="h-4 w-4" />
-
           </Link>
 
         </div>
 
       </section>
-
-      {/* =========================
-          FOOTER
-      ========================= */}
 
       <footer className="mt-10 border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
 
