@@ -1,10 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {
-  MouseEvent,
-  KeyboardEvent,
-} from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -83,119 +79,58 @@ const locations = [
 ];
 
 export default function HomePage() {
-  // =========================
-  // STATES
-  // =========================
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobsError, setJobsError] = useState("");
 
-  const [filterOpen, setFilterOpen] =
-    useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    []
+  );
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
-  const [user, setUser] =
-    useState<User | null>(null);
+  const [search, setSearch] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
 
-  const [jobs, setJobs] =
-    useState<Job[]>([]);
-
-  const [loadingJobs, setLoadingJobs] =
-    useState(true);
-
-  const [jobsError, setJobsError] =
-    useState("");
-
-  const [selectedCategories, setSelectedCategories] =
-    useState<string[]>([]);
-
-  const [selectedLocations, setSelectedLocations] =
-    useState<string[]>([]);
-
-  const [search, setSearch] =
-    useState("");
-
-  const [searchLocation, setSearchLocation] =
-    useState("");
-
-  const [currentPage, setCurrentPage] =
-    useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [heroMouse, setHeroMouse] = useState({
     x: 0,
     y: 0,
   });
 
-  const [darkMode, setDarkMode] =
-    useState(false);
+  // =========================
+  // FIXED LIGHT THEME
+  // =========================
 
-  // =========================
-  // DARK MODE
-  // =========================
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const savedTheme =
-      localStorage.getItem(
-        "campushire_theme"
-      );
+    // Always keep the website in light mode.
+    // This prevents phone/laptop/browser system themes
+    // from changing the website colors.
+    setDarkMode(false);
 
-    const prefersDark =
-      typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-
-    const shouldUseDark = savedTheme
-      ? savedTheme === "dark"
-      : prefersDark;
-
-    setDarkMode(shouldUseDark);
-
-    document.documentElement.classList.toggle(
-      "dark",
-      shouldUseDark
-    );
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("campushire_theme", "light");
   }, []);
-
-  function toggleDarkMode() {
-    setDarkMode((prev) => {
-      const next = !prev;
-
-      document.documentElement.classList.toggle(
-        "dark",
-        next
-      );
-
-      localStorage.setItem(
-        "campushire_theme",
-        next ? "dark" : "light"
-      );
-
-      return next;
-    });
-  }
 
   // =========================
   // HERO MOUSE EFFECT
   // =========================
 
   function handleHeroMouseMove(
-    e: MouseEvent<HTMLDivElement>
+    e: React.MouseEvent<HTMLDivElement>
   ) {
-    const rect =
-      e.currentTarget.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
 
     const x =
-      ((e.clientX - rect.left) /
-        rect.width -
-        0.5) *
-      2;
+      ((e.clientX - rect.left) / rect.width - 0.5) * 2;
 
     const y =
-      ((e.clientY - rect.top) /
-        rect.height -
-        0.5) *
-      2;
+      ((e.clientY - rect.top) / rect.height - 0.5) * 2;
 
     setHeroMouse({
       x,
@@ -209,20 +144,15 @@ export default function HomePage() {
 
   useEffect(() => {
     const savedUser =
-      localStorage.getItem(
-        "campushire_user"
-      );
+      localStorage.getItem("campushire_user");
 
     if (savedUser) {
       try {
-        const parsedUser: User =
-          JSON.parse(savedUser);
+        const parsedUser: User = JSON.parse(savedUser);
 
         setUser(parsedUser);
       } catch {
-        localStorage.removeItem(
-          "campushire_user"
-        );
+        localStorage.removeItem("campushire_user");
       }
     }
   }, []);
@@ -244,33 +174,25 @@ export default function HomePage() {
         process.env.NEXT_PUBLIC_API_URL ||
         "https://campushire-xl9m.onrender.com";
 
-      const response = await fetch(
-        `${API_URL}/jobs`
-      );
+      const response = await fetch(`${API_URL}/jobs`);
 
       if (!response.ok) {
-        throw new Error(
-          "Failed to fetch jobs"
-        );
+        throw new Error("Failed to fetch jobs");
       }
 
       const data = await response.json();
 
-      const jobList: Job[] =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(data.jobs)
-          ? data.jobs
-          : Array.isArray(data.data)
-          ? data.data
-          : [];
+      const jobList: Job[] = Array.isArray(data)
+        ? data
+        : Array.isArray(data.jobs)
+        ? data.jobs
+        : Array.isArray(data.data)
+        ? data.data
+        : [];
 
       setJobs(jobList);
     } catch (error) {
-      console.error(
-        "Failed to fetch jobs:",
-        error
-      );
+      console.error("Failed to fetch jobs:", error);
 
       setJobsError(
         "Unable to load jobs. Please make sure the backend is running."
@@ -285,13 +207,8 @@ export default function HomePage() {
   // =========================
 
   function handleLogout() {
-    localStorage.removeItem(
-      "campushire_user"
-    );
-
-    localStorage.removeItem(
-      "campushire_token"
-    );
+    localStorage.removeItem("campushire_user");
+    localStorage.removeItem("campushire_token");
 
     setUser(null);
     setMenuOpen(false);
@@ -301,28 +218,20 @@ export default function HomePage() {
   // FILTERS
   // =========================
 
-  function toggleCategory(
-    category: string
-  ) {
+  function toggleCategory(category: string) {
     setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(
-            (item) => item !== category
-          )
+        ? prev.filter((item) => item !== category)
         : [...prev, category]
     );
 
     setCurrentPage(1);
   }
 
-  function toggleLocation(
-    location: string
-  ) {
+  function toggleLocation(location: string) {
     setSelectedLocations((prev) =>
       prev.includes(location)
-        ? prev.filter(
-            (item) => item !== location
-          )
+        ? prev.filter((item) => item !== location)
         : [...prev, location]
     );
 
@@ -338,7 +247,7 @@ export default function HomePage() {
   }
 
   function handleSearchKeyDown(
-    e: KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>
   ) {
     if (e.key === "Enter") {
       handleSearch();
@@ -349,97 +258,85 @@ export default function HomePage() {
   // FILTER JOBS
   // =========================
 
-  const filteredJobs = jobs.filter(
-    (job) => {
-      const searchValue =
-        search.toLowerCase().trim();
+  const filteredJobs = jobs.filter((job) => {
+    const searchValue =
+      search.toLowerCase().trim();
 
-      const locationValue =
-        searchLocation
-          .toLowerCase()
-          .trim();
+    const locationValue =
+      searchLocation.toLowerCase().trim();
 
-      const matchesSearch =
-        !searchValue ||
-        job.title
-          ?.toLowerCase()
-          .includes(searchValue) ||
-        job.company
-          ?.toLowerCase()
-          .includes(searchValue) ||
-        job.roleCategory
-          ?.toLowerCase()
-          .includes(searchValue) ||
-        job.description
-          ?.toLowerCase()
-          .includes(searchValue) ||
-        job.skills?.some((skill) =>
-          skill
-            .toLowerCase()
-            .includes(searchValue)
-        );
-
-      const matchesSearchLocation =
-        !locationValue ||
-        job.location
-          ?.toLowerCase()
-          .includes(locationValue) ||
-        job.city
-          ?.toLowerCase()
-          .includes(locationValue);
-
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.some(
-          (category) => {
-            const value =
-              category.toLowerCase();
-
-            return (
-              job.title
-                ?.toLowerCase()
-                .includes(value) ||
-              job.roleCategory
-                ?.toLowerCase()
-                .includes(value) ||
-              job.skills?.some((skill) =>
-                skill
-                  .toLowerCase()
-                  .includes(value)
-              )
-            );
-          }
-        );
-
-      const matchesLocation =
-        selectedLocations.length === 0 ||
-        selectedLocations.some(
-          (location) => {
-            const value =
-              location.toLowerCase();
-
-            return (
-              job.location
-                ?.toLowerCase()
-                .includes(value) ||
-              job.city
-                ?.toLowerCase()
-                .includes(value) ||
-              job.workMode
-                ?.toLowerCase()
-                .includes(value)
-            );
-          }
-        );
-
-      return (
-        matchesSearch &&
-        matchesSearchLocation &&
-        matchesCategory &&
-        matchesLocation
+    const matchesSearch =
+      !searchValue ||
+      job.title
+        ?.toLowerCase()
+        .includes(searchValue) ||
+      job.company
+        ?.toLowerCase()
+        .includes(searchValue) ||
+      job.roleCategory
+        ?.toLowerCase()
+        .includes(searchValue) ||
+      job.description
+        ?.toLowerCase()
+        .includes(searchValue) ||
+      job.skills?.some((skill) =>
+        skill.toLowerCase().includes(searchValue)
       );
-    }
-  );
+
+    const matchesSearchLocation =
+      !locationValue ||
+      job.location
+        ?.toLowerCase()
+        .includes(locationValue) ||
+      job.city
+        ?.toLowerCase()
+        .includes(locationValue);
+
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.some((category) => {
+        const value =
+          category.toLowerCase();
+
+        return (
+          job.title
+            ?.toLowerCase()
+            .includes(value) ||
+          job.roleCategory
+            ?.toLowerCase()
+            .includes(value) ||
+          job.skills?.some((skill) =>
+            skill.toLowerCase().includes(value)
+          )
+        );
+      });
+
+    const matchesLocation =
+      selectedLocations.length === 0 ||
+      selectedLocations.some((location) => {
+        const value =
+          location.toLowerCase();
+
+        return (
+          job.location
+            ?.toLowerCase()
+            .includes(value) ||
+          job.city
+            ?.toLowerCase()
+            .includes(value) ||
+          job.workMode
+            ?.toLowerCase()
+            .includes(value)
+        );
+      });
+
+    return (
+      matchesSearch &&
+      matchesSearchLocation &&
+      matchesCategory &&
+      matchesLocation
+    );
+  });
 
   // =========================
   // PAGINATION
@@ -448,8 +345,7 @@ export default function HomePage() {
   const totalPages = Math.max(
     1,
     Math.ceil(
-      filteredJobs.length /
-        JOBS_PER_PAGE
+      filteredJobs.length / JOBS_PER_PAGE
     )
   );
 
@@ -500,9 +396,7 @@ export default function HomePage() {
         return "Salary not specified";
       }
 
-      return `₹${salary.toLocaleString(
-        "en-IN"
-      )}`;
+      return `₹${salary.toLocaleString("en-IN")}`;
     }
 
     if (typeof salary === "string") {
@@ -513,9 +407,13 @@ export default function HomePage() {
         return "Salary not specified";
       }
 
-      const numericSalary = Number(
-        trimmedSalary.replace(/,/g, "")
-      );
+      const numericSalary =
+        Number(
+          trimmedSalary.replace(
+            /,/g,
+            ""
+          )
+        );
 
       if (
         !Number.isNaN(numericSalary) &&
@@ -556,17 +454,8 @@ export default function HomePage() {
   const isStudent =
     user?.role === "student";
 
-  // =========================
-  // UI
-  // =========================
-
   return (
-    <main className="min-h-screen bg-white text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
-
-      {/* =========================
-          ANIMATIONS
-      ========================= */}
-
+    <main className="min-h-screen bg-white text-slate-900 transition-colors">
       <style jsx>{`
         @keyframes fadeSlideUp {
           from {
@@ -720,15 +609,10 @@ export default function HomePage() {
         }
       `}</style>
 
-      {/* =========================
-          NAVBAR
-      ========================= */}
+      {/* NAVBAR */}
 
-      <header className="border-b border-slate-200 bg-white transition-colors dark:border-slate-800 dark:bg-slate-950">
+      <header className="border-b border-slate-200 bg-white transition-colors">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-
-          {/* LOGO */}
-
           <Link
             href={
               isRecruiter
@@ -746,29 +630,26 @@ export default function HomePage() {
             </span>
           </Link>
 
-          {/* DESKTOP NAV */}
-
           <nav className="hidden items-center gap-6 text-sm md:flex">
-
             {isStudent && (
               <>
                 <Link
                   href="/jobs"
-                  className="text-slate-600 transition-colors hover:text-purple-900 dark:text-slate-300 dark:hover:text-purple-300"
+                  className="text-slate-600 transition-colors hover:text-purple-900"
                 >
                   Find Jobs
                 </Link>
 
                 <Link
                   href="/applications"
-                  className="text-slate-600 transition-colors hover:text-purple-900 dark:text-slate-300 dark:hover:text-purple-300"
+                  className="text-slate-600 transition-colors hover:text-purple-900"
                 >
                   My Applications
                 </Link>
 
                 <Link
                   href="/profile"
-                  className="text-slate-600 transition-colors hover:text-purple-900 dark:text-slate-300 dark:hover:text-purple-300"
+                  className="text-slate-600 transition-colors hover:text-purple-900"
                 >
                   Resume Analysis
                 </Link>
@@ -779,21 +660,21 @@ export default function HomePage() {
               <>
                 <Link
                   href="/recruiter"
-                  className="font-medium text-purple-900 hover:text-purple-700 dark:text-purple-300 dark:hover:text-purple-200"
+                  className="font-medium text-purple-900 hover:text-purple-700"
                 >
                   Dashboard
                 </Link>
 
                 <Link
                   href="/recruiter/jobs"
-                  className="text-slate-600 transition-colors hover:text-purple-900 dark:text-slate-300 dark:hover:text-purple-300"
+                  className="text-slate-600 transition-colors hover:text-purple-900"
                 >
                   My Jobs
                 </Link>
 
                 <Link
                   href="/recruiter/applications"
-                  className="text-slate-600 transition-colors hover:text-purple-900 dark:text-slate-300 dark:hover:text-purple-300"
+                  className="text-slate-600 transition-colors hover:text-purple-900"
                 >
                   Applications
                 </Link>
@@ -801,23 +682,19 @@ export default function HomePage() {
             )}
           </nav>
 
-          {/* AUTH */}
-
           <div className="hidden items-center gap-3 text-sm md:flex">
             {user ? (
               <>
-                <span className="mr-1 text-slate-600 dark:text-slate-300">
+                <span className="mr-1 text-slate-600">
                   Hi{" "}
-                  <span className="font-medium text-slate-900 dark:text-slate-100">
+                  <span className="font-medium text-slate-900">
                     {user.name}
                   </span>
                 </span>
 
                 <button
-                  onClick={
-                    handleLogout
-                  }
-                  className="font-medium text-purple-900 hover:underline dark:text-purple-300"
+                  onClick={handleLogout}
+                  className="font-medium text-purple-900 hover:underline"
                 >
                   Log out
                 </button>
@@ -826,7 +703,7 @@ export default function HomePage() {
               <>
                 <Link
                   href="/login"
-                  className="rounded-full border border-purple-900 px-5 py-2.5 font-medium text-purple-900 transition-colors hover:bg-purple-50 dark:border-purple-400 dark:text-purple-300 dark:hover:bg-purple-950"
+                  className="rounded-full border border-purple-900 px-5 py-2.5 font-medium text-purple-900 transition-colors hover:bg-purple-50"
                 >
                   Login
                 </Link>
@@ -840,32 +717,19 @@ export default function HomePage() {
               </>
             )}
 
-            {/* DARK MODE */}
-
+            {/* Fixed visual toggle - does not change theme */}
             <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle dark mode"
-              className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
-                darkMode
-                  ? "bg-purple-900"
-                  : "bg-slate-300"
-              }`}
+              type="button"
+              aria-label="Light mode"
+              className="relative h-4 w-7 shrink-0 rounded-full bg-slate-300"
             >
-              <span
-                className={`absolute top-0.5 h-3 w-3 rounded-full shadow transition-transform ${
-                  darkMode
-                    ? "translate-x-3.5 bg-purple-200"
-                    : "translate-x-0.5 bg-purple-900"
-                }`}
-              />
+              <span className="absolute top-0.5 h-3 w-3 translate-x-0.5 rounded-full bg-purple-900 shadow" />
             </button>
           </div>
 
-          {/* MOBILE BUTTONS */}
-
           <div className="flex items-center gap-2 md:hidden">
             <button
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200"
               aria-label="Toggle menu"
               onClick={() =>
                 setMenuOpen(
@@ -880,32 +744,20 @@ export default function HomePage() {
               )}
             </button>
 
+            {/* Fixed visual toggle - does not change theme */}
             <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle dark mode"
-              className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
-                darkMode
-                  ? "bg-purple-900"
-                  : "bg-slate-300"
-              }`}
+              type="button"
+              aria-label="Light mode"
+              className="relative h-4 w-7 shrink-0 rounded-full bg-slate-300"
             >
-              <span
-                className={`absolute top-0.5 h-3 w-3 rounded-full shadow transition-transform ${
-                  darkMode
-                    ? "translate-x-3.5 bg-purple-200"
-                    : "translate-x-0.5 bg-purple-900"
-                }`}
-              />
+              <span className="absolute top-0.5 h-3 w-3 translate-x-0.5 rounded-full bg-purple-900 shadow" />
             </button>
           </div>
         </div>
 
-        {/* MOBILE MENU */}
-
         {menuOpen && (
-          <div className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 md:hidden">
+          <div className="border-t border-slate-200 bg-white md:hidden">
             <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 text-sm">
-
               {isStudent && (
                 <>
                   <Link
@@ -913,7 +765,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                    className="border-b border-slate-100 py-2.5 text-slate-600"
                   >
                     Find Jobs
                   </Link>
@@ -923,7 +775,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                    className="border-b border-slate-100 py-2.5 text-slate-600"
                   >
                     My Applications
                   </Link>
@@ -933,7 +785,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                    className="border-b border-slate-100 py-2.5 text-slate-600"
                   >
                     Resume Analysis
                   </Link>
@@ -947,7 +799,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 font-medium text-purple-900 dark:border-slate-800 dark:text-purple-300"
+                    className="border-b border-slate-100 py-2.5 font-medium text-purple-900"
                   >
                     Dashboard
                   </Link>
@@ -957,7 +809,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                    className="border-b border-slate-100 py-2.5 text-slate-600"
                   >
                     My Jobs
                   </Link>
@@ -967,7 +819,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="border-b border-slate-100 py-2.5 text-slate-600 dark:border-slate-800 dark:text-slate-300"
+                    className="border-b border-slate-100 py-2.5 text-slate-600"
                   >
                     Applications
                   </Link>
@@ -976,18 +828,16 @@ export default function HomePage() {
 
               {user ? (
                 <>
-                  <div className="border-b border-slate-100 py-2.5 dark:border-slate-800 dark:text-slate-300">
+                  <div className="border-b border-slate-100 py-2.5 text-slate-600">
                     Hi{" "}
-                    <span className="font-medium">
+                    <span className="font-medium text-slate-900">
                       {user.name}
                     </span>
                   </div>
 
                   <button
-                    onClick={
-                      handleLogout
-                    }
-                    className="py-2.5 text-left font-medium text-purple-900 dark:text-purple-300"
+                    onClick={handleLogout}
+                    className="py-2.5 text-left font-medium text-purple-900"
                   >
                     Log out
                   </button>
@@ -999,7 +849,7 @@ export default function HomePage() {
                     onClick={() =>
                       setMenuOpen(false)
                     }
-                    className="rounded-full border border-purple-900 py-2.5 text-center font-medium text-purple-900 dark:border-purple-400 dark:text-purple-300"
+                    className="rounded-full border border-purple-900 py-2.5 text-center font-medium text-purple-900"
                   >
                     Login
                   </Link>
@@ -1020,16 +870,14 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* =========================
-          HERO
-      ========================= */}
+      {/* HERO */}
 
-      <section className="mx-auto max-w-6xl px-5 pt-8 sm:pt-10">
+      <section className="mx-auto max-w-6xl px-5 pt-10">
         <div
           onMouseMove={
             handleHeroMouseMove
           }
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-5 py-12 text-center sm:px-6 sm:py-16 md:py-20"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-6 py-16 text-center md:py-20"
         >
           <div
             className="glow-blob pointer-events-none absolute -left-10 -top-10 h-56 w-56 rounded-full bg-purple-500/20 blur-3xl"
@@ -1054,7 +902,7 @@ export default function HomePage() {
             }}
           />
 
-          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
             Find your next opportunity
           </h1>
 
@@ -1065,27 +913,18 @@ export default function HomePage() {
           </p>
 
           <div className="hero-animate hero-delay-2 relative mx-auto mt-6 flex max-w-xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-purple-200 md:text-sm">
-            <span>
-              500+ Active Jobs
-            </span>
+            <span>500+ Active Jobs</span>
 
             <span className="hidden h-1 w-1 rounded-full bg-purple-400 sm:block" />
 
-            <span>
-              200+ Companies
-            </span>
+            <span>200+ Companies</span>
 
             <span className="hidden h-1 w-1 rounded-full bg-purple-400 sm:block" />
 
-            <span>
-              10k+ Candidates
-            </span>
+            <span>10k+ Candidates</span>
           </div>
 
-          {/* SEARCH */}
-
-          <div className="hero-animate hero-delay-3 search-glow relative mx-auto mt-8 flex max-w-2xl flex-col items-stretch gap-2 rounded-2xl bg-white p-2 shadow-lg sm:flex-row dark:bg-slate-900">
-
+          <div className="hero-animate hero-delay-3 search-glow relative mx-auto mt-8 flex max-w-2xl flex-col items-stretch gap-2 rounded-2xl bg-white p-2 shadow-lg sm:flex-row">
             <div className="flex flex-1 items-center gap-2.5 px-4 py-2.5">
               <Search className="h-4 w-4 shrink-0 text-slate-400" />
 
@@ -1094,18 +933,16 @@ export default function HomePage() {
                 placeholder="Search for jobs or skills"
                 value={search}
                 onChange={(e) =>
-                  setSearch(
-                    e.target.value
-                  )
+                  setSearch(e.target.value)
                 }
                 onKeyDown={
                   handleSearchKeyDown
                 }
-                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
+                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
               />
             </div>
 
-            <div className="my-1.5 hidden w-px bg-slate-200 sm:block dark:bg-slate-700" />
+            <div className="my-1.5 hidden w-px bg-slate-200 sm:block" />
 
             <div className="flex flex-1 items-center gap-2.5 px-4 py-2.5">
               <MapPin className="h-4 w-4 shrink-0 text-slate-400" />
@@ -1122,14 +959,12 @@ export default function HomePage() {
                 onKeyDown={
                   handleSearchKeyDown
                 }
-                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
+                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
               />
             </div>
 
             <button
-              onClick={
-                handleSearch
-              }
+              onClick={handleSearch}
               className="shine-btn shrink-0 rounded-xl bg-purple-900 px-7 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.03] hover:bg-purple-800 active:scale-[0.98]"
             >
               Search
@@ -1138,60 +973,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* =========================
-          JOB SECTION
-      ========================= */}
+      {/* JOB SECTION */}
 
-      <section className="mx-auto max-w-6xl px-5 py-12 sm:py-16">
-
+      <section className="mx-auto max-w-6xl px-5 py-16">
         <div className="mb-8">
           <h2 className="text-xl font-semibold md:text-2xl">
             Latest opportunities
           </h2>
 
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-sm text-slate-500">
             Find roles that match your
             skills and career goals.
           </p>
         </div>
 
-        {/* =========================
-            MOBILE FILTER BUTTON
-        ========================= */}
-
-        <div className="mb-6 lg:hidden">
-          <button
-            onClick={() =>
-              setFilterOpen(true)
-            }
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-          >
-            <Search className="h-4 w-4" />
-
-            Filters
-
-            {(selectedCategories.length >
-              0 ||
-              selectedLocations.length >
-                0) && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-purple-900 px-1.5 text-[10px] text-white">
-                {selectedCategories.length +
-                  selectedLocations.length}
-              </span>
-            )}
-          </button>
-        </div>
-
         <div className="grid gap-10 lg:grid-cols-[210px_1fr]">
-
-          {/* =========================
-              DESKTOP FILTER SIDEBAR
-          ========================= */}
-
-          <aside className="hidden flex-col gap-8 lg:flex">
-
-            {/* CATEGORIES */}
-
+          <aside className="flex flex-col gap-8">
             <div>
               <h3 className="mb-3 text-sm font-semibold">
                 Search by Categories
@@ -1202,7 +999,7 @@ export default function HomePage() {
                   (category) => (
                     <label
                       key={category}
-                      className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300"
+                      className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-600"
                     >
                       <input
                         type="checkbox"
@@ -1214,7 +1011,7 @@ export default function HomePage() {
                             category
                           )
                         }
-                        className="h-4 w-4 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                        className="h-4 w-4 rounded border-slate-300 text-purple-900 focus:ring-purple-900"
                       />
 
                       {category}
@@ -1223,8 +1020,6 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-
-            {/* LOCATIONS */}
 
             <div>
               <h3 className="mb-3 text-sm font-semibold">
@@ -1236,7 +1031,7 @@ export default function HomePage() {
                   (location) => (
                     <label
                       key={location}
-                      className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300"
+                      className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-600"
                     >
                       <input
                         type="checkbox"
@@ -1248,7 +1043,7 @@ export default function HomePage() {
                             location
                           )
                         }
-                        className="h-4 w-4 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                        className="h-4 w-4 rounded border-slate-300 text-purple-900 focus:ring-purple-900"
                       />
 
                       {location}
@@ -1259,163 +1054,26 @@ export default function HomePage() {
             </div>
           </aside>
 
-          {/* =========================
-              MOBILE FILTER DRAWER
-          ========================= */}
-
-          {filterOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden">
-
-              {/* OVERLAY */}
-
-              <div
-                className="absolute inset-0 bg-black/40"
-                onClick={() =>
-                  setFilterOpen(false)
-                }
-              />
-
-              {/* DRAWER */}
-
-              <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-white p-6 shadow-xl dark:bg-slate-950">
-
-                {/* HEADER */}
-
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-semibold">
-                      Filters
-                    </h2>
-
-                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                      Refine your job search
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() =>
-                      setFilterOpen(false)
-                    }
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700"
-                    aria-label="Close filters"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* CATEGORIES */}
-
-                <div>
-                  <h3 className="mb-3 text-sm font-semibold">
-                    Search by Categories
-                  </h3>
-
-                  <div className="flex flex-col gap-3">
-                    {categories.map(
-                      (category) => (
-                        <label
-                          key={category}
-                          className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedCategories.includes(
-                              category
-                            )}
-                            onChange={() =>
-                              toggleCategory(
-                                category
-                              )
-                            }
-                            className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
-                          />
-
-                          {category}
-                        </label>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                {/* LOCATIONS */}
-
-                <div className="mt-8">
-                  <h3 className="mb-3 text-sm font-semibold">
-                    Search by Location
-                  </h3>
-
-                  <div className="flex flex-col gap-3">
-                    {locations.map(
-                      (location) => (
-                        <label
-                          key={location}
-                          className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedLocations.includes(
-                              location
-                            )}
-                            onChange={() =>
-                              toggleLocation(
-                                location
-                              )
-                            }
-                            className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
-                          />
-
-                          {location}
-                        </label>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                {/* APPLY */}
-
-                <button
-                  onClick={() =>
-                    setFilterOpen(false)
-                  }
-                  className="mt-8 w-full rounded-xl bg-purple-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-800"
-                >
-                  Apply Filters
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* =========================
-              JOB LIST
-          ========================= */}
-
           <div className="flex flex-col gap-5">
-
-            {/* LOADING */}
-
             {loadingJobs && (
               <div className="py-20 text-center">
-                <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple-900 dark:text-purple-400" />
+                <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple-900" />
 
-                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                <p className="mt-4 text-sm text-slate-500">
                   Loading latest jobs...
                 </p>
               </div>
             )}
 
-            {/* ERROR */}
-
             {!loadingJobs &&
               jobsError && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-900 dark:bg-red-950">
-                  <p className="text-sm text-red-600 dark:text-red-400">
+                <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
+                  <p className="text-sm text-red-600">
                     {jobsError}
                   </p>
 
                   <button
-                    onClick={
-                      fetchJobs
-                    }
+                    onClick={fetchJobs}
                     className="mt-4 rounded-full bg-purple-900 px-5 py-2 text-sm font-medium text-white hover:bg-purple-800"
                   >
                     Try Again
@@ -1423,37 +1081,30 @@ export default function HomePage() {
                 </div>
               )}
 
-            {/* JOBS */}
-
             {!loadingJobs &&
               !jobsError &&
-              paginatedJobs.length >
-                0 && (
+              paginatedJobs.length > 0 && (
                 <div className="flex flex-col gap-4">
-
                   {paginatedJobs.map(
                     (job) => (
                       <div
                         key={job._id}
-                        className="rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6 dark:border-slate-800 dark:bg-slate-900"
+                        className="rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-md"
                       >
-
-                        {/* TITLE + SALARY */}
-
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                           <div className="min-w-0">
-                            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            <h3 className="text-lg font-semibold text-slate-900">
                               {job.title}
                             </h3>
 
-                            <p className="mt-1 text-sm font-medium text-purple-900 dark:text-purple-300">
+                            <p className="mt-1 text-sm font-medium text-purple-900">
                               {job.company ||
                                 "Company not specified"}
                             </p>
                           </div>
 
                           <div className="shrink-0">
-                            <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                            <p className="text-sm font-semibold text-slate-800">
                               {formatSalary(
                                 job
                               )}
@@ -1461,12 +1112,9 @@ export default function HomePage() {
                           </div>
                         </div>
 
-                        {/* TAGS */}
-
                         <div className="mt-4 flex flex-wrap items-center gap-2">
-
                           {job.location && (
-                            <span className="flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-900 dark:bg-purple-950 dark:text-purple-300">
+                            <span className="flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-900">
                               <MapPin className="h-3.5 w-3.5" />
 
                               {job.location}
@@ -1474,13 +1122,13 @@ export default function HomePage() {
                           )}
 
                           {job.workMode && (
-                            <span className="rounded-full bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700 dark:bg-rose-950 dark:text-rose-300">
+                            <span className="rounded-full bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700">
                               {job.workMode}
                             </span>
                           )}
 
                           {job.experience && (
-                            <span className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                            <span className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
                               Experience:{" "}
                               {job.experience
                                 .minYears ??
@@ -1494,30 +1142,22 @@ export default function HomePage() {
                           )}
 
                           {job.isFresherFriendly && (
-                            <span className="rounded-full bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 dark:bg-green-950 dark:text-green-300">
+                            <span className="rounded-full bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
                               Fresher friendly
                             </span>
                           )}
                         </div>
 
-                        {/* DESCRIPTION */}
-
-                        <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                        <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-slate-500">
                           {job.description ||
                             "No detailed description available."}
                         </p>
 
-                        {/* SKILLS */}
-
                         {job.skills &&
-                          job.skills.length >
-                            0 && (
+                          job.skills.length > 0 && (
                             <div className="mt-4 flex flex-wrap gap-2">
                               {job.skills
-                                .slice(
-                                  0,
-                                  5
-                                )
+                                .slice(0, 5)
                                 .map(
                                   (
                                     skill
@@ -1526,7 +1166,7 @@ export default function HomePage() {
                                       key={
                                         skill
                                       }
-                                      className="rounded-md border border-slate-200 px-2.5 py-1 text-xs text-slate-600 dark:border-slate-700 dark:text-slate-300"
+                                      className="rounded-md border border-slate-200 px-2.5 py-1 text-xs text-slate-600"
                                     >
                                       {
                                         skill
@@ -1537,10 +1177,7 @@ export default function HomePage() {
                             </div>
                           )}
 
-                        {/* BOTTOM */}
-
-                        <div className="mt-5 flex flex-col gap-4 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
-
+                        <div className="mt-5 flex flex-col gap-4 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
                           <span className="flex items-center gap-1.5 text-xs text-slate-400">
                             <Clock className="h-3.5 w-3.5" />
 
@@ -1548,11 +1185,10 @@ export default function HomePage() {
                               "Recently"}
                           </span>
 
-                          <div className="flex w-full gap-2 sm:w-auto">
-
+                          <div className="flex gap-2">
                             <Link
                               href={`/jobs/${job._id}`}
-                              className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 sm:flex-none dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
                             >
                               Learn more
                             </Link>
@@ -1560,7 +1196,7 @@ export default function HomePage() {
                             {isStudent && (
                               <Link
                                 href={`/jobs/${job._id}/apply`}
-                                className="flex-1 rounded-full bg-purple-900 px-5 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-purple-800 sm:flex-none"
+                                className="rounded-full bg-purple-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-800"
                               >
                                 Apply now
                               </Link>
@@ -1573,90 +1209,74 @@ export default function HomePage() {
                 </div>
               )}
 
-            {/* NO JOBS */}
-
             {!loadingJobs &&
               !jobsError &&
-              filteredJobs.length ===
-                0 && (
-                <div className="rounded-2xl border border-slate-200 p-12 text-center dark:border-slate-800">
-                  <Search className="mx-auto h-9 w-9 text-slate-300 dark:text-slate-600" />
+              filteredJobs.length === 0 && (
+                <div className="rounded-2xl border border-slate-200 p-12 text-center">
+                  <Search className="mx-auto h-9 w-9 text-slate-300" />
 
                   <h3 className="mt-4 text-lg font-semibold">
                     No jobs found
                   </h3>
 
-                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  <p className="mt-2 text-sm text-slate-500">
                     Try changing your
                     search or filters.
                   </p>
                 </div>
               )}
 
-            {/* PAGINATION */}
-
             {!loadingJobs &&
               !jobsError &&
-              filteredJobs.length >
-                0 && (
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
-
+              filteredJobs.length > 0 && (
+                <div className="mt-4 flex items-center justify-center gap-1.5">
                   <button
                     onClick={() =>
                       goToPage(
-                        safeCurrentPage -
-                          1
+                        safeCurrentPage - 1
                       )
                     }
                     disabled={
-                      safeCurrentPage ===
-                      1
+                      safeCurrentPage === 1
                     }
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
 
                   {Array.from(
                     {
-                      length:
-                        totalPages,
+                      length: totalPages,
                     },
-                    (_, i) =>
-                      i + 1
-                  ).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() =>
-                          goToPage(
-                            page
-                          )
-                        }
-                        className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors ${
-                          page ===
-                          safeCurrentPage
-                            ? "bg-purple-900 text-white"
-                            : "border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
+                    (_, i) => i + 1
+                  ).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() =>
+                        goToPage(page)
+                      }
+                      className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                        page ===
+                        safeCurrentPage
+                          ? "bg-purple-900 text-white"
+                          : "border border-slate-200 text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
 
                   <button
                     onClick={() =>
                       goToPage(
-                        safeCurrentPage +
-                          1
+                        safeCurrentPage + 1
                       )
                     }
                     disabled={
                       safeCurrentPage ===
                       totalPages
                     }
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>
@@ -1666,22 +1286,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* =========================
-          CTA
-      ========================= */}
+      {/* CTA */}
 
       {!isRecruiter && (
-        <section className="border-y border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
+        <section className="border-y border-slate-200 bg-slate-50">
           <div className="mx-auto max-w-6xl px-5 py-14">
-            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-950">
-
+            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8 md:flex-row md:items-center md:justify-between">
               <div>
                 <h2 className="text-xl font-semibold md:text-2xl">
                   Ready for your next
                   opportunity?
                 </h2>
 
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                <p className="mt-2 text-sm text-slate-500">
                   Upload your resume and
                   discover jobs that match
                   your skills.
@@ -1701,13 +1318,11 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* =========================
-          FOOTER
-      ========================= */}
+      {/* FOOTER */}
 
-      <footer className="border-t border-slate-200 dark:border-slate-800">
+      <footer className="border-t border-slate-200">
         <div className="mx-auto max-w-6xl px-5 py-6">
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-slate-400">
             © 2026 CampusHire
           </p>
         </div>
