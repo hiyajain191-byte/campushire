@@ -1,0 +1,915 @@
+[
+  {
+    "externalJobId": 4620,
+    "title": "React Developer",
+    "company": "Prudas Technologies",
+    "location": "Noida",
+    "city": "Noida",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Backend",
+      "GIT",
+      "NoSQL",
+      "HP data protector",
+      "RDBMS",
+      "Javascript",
+      "MongoDB",
+      "JIRA"
+    ],
+    "description": "Creating RESTful services with Node.js . MERN stack developer must have proven experien...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-react-developer-prudas-technologies-private-limited-noida-1-to-3-years-251024501557",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6276,
+    "title": "React Developer",
+    "company": "Busigence Technologies",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Web application development",
+      "Artificial Intelligence",
+      "Web application",
+      "Web development",
+      "Machine learning",
+      "Javascript",
+      "HTTP",
+      "Natural language processing"
+    ],
+    "description": "We are looking for engineers with real passion for user interface web development ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-react-developer-busigence-technologies-remote-0-to-4-years-100423502039",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6272,
+    "title": "Fullstack Web Developer",
+    "company": "Busigence Technologies",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Managed services",
+      "Web technologies",
+      "Artificial Intelligence",
+      "Web development",
+      "Machine learning",
+      "HTTP",
+      "JSON",
+      "Natural language processing"
+    ],
+    "description": "1. Code in Javascript from scratch ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-fullstack-web-developer-busigence-technologies-remote-0-to-4-years-220322500558",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 11027,
+    "title": "Regular Fullstack Developer (Java+Angular)",
+    "company": "Bluesoft Software Solution",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Cloud computing",
+      "Manager Quality Assurance",
+      "RDBMS",
+      "Coding",
+      "Project management",
+      "Consulting",
+      "power bi",
+      "Workflow"
+    ],
+    "description": ". With our extensive testing experience gained from building and implementing our own s...",
+    "postedDate": "4 days ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-regular-fullstack-developer-java-angular-bluesoft-software-solution-remote-1-to-5-years-050626503960",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 11520,
+    "title": "Associate Principal Engineer, Frontend React",
+    "company": "Nagarro",
+    "location": "Bengaluru",
+    "city": "Bangalore",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "front end",
+      "css",
+      "python",
+      "ui development",
+      "bootstrap",
+      "backend development",
+      "ajax",
+      "scalability"
+    ],
+    "description": "Disclaimer: This job description has been sourced from a public domain and may have bee...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-associate-principal-engineer-frontend-react-nagarro-software-pvt-ltd-bengaluru-0-to-3-years-291025503104",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 718,
+    "title": "Data & Backend Analyst",
+    "company": "Backrock Studios",
+    "location": "Bengaluru",
+    "city": "Bangalore",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 2.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Backend",
+      "Senior Analyst",
+      "Gaming",
+      "Senior",
+      "Data"
+    ],
+    "description": "Backrock Studios is building a high-quality, technical, and creative studio for th...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-data-backend-analyst-backrock-studios-bengaluru-0-to-2-years-230326505250",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6406,
+    "title": "Backend Developer",
+    "company": "True Choice",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Automation",
+      "Software design",
+      "Coding",
+      "Project management",
+      "Web development",
+      "Javascript",
+      "Data structures",
+      "Workflow"
+    ],
+    "description": "Work cross-team (project management, data scientists, and developers) with key-stak...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-backend-developer-true-choice-remote-1-to-3-years-221222500537",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6199,
+    "title": "Backend engineer",
+    "company": "Aampe",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 2.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "interviewing",
+      "algorithms",
+      "head hunting",
+      "c++",
+      "screening",
+      "software testing",
+      "hiring",
+      "salary negotiation"
+    ],
+    "description": "You will design, build and maintain the backend services that power Aampes personaliz...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-backend-engineer-aampe-remote-0-to-2-years-140525503527",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 5552,
+    "title": "Backend Engineer",
+    "company": "Flowrec Solutions Kolkata",
+    "location": "Kolkata",
+    "city": "Kolkata",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Backend"
+    ],
+    "description": "Flowrec Solutions is looking for Backend Engineer to join our dynamic team and embark ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-backend-engineer-flowrec-solutions-kolkata-1-to-3-years-260724500638",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6596,
+    "title": "DATA Analyst/SEMI VOICE/KAM/Executive/BACKEND_WORLD Largest BRAND!",
+    "company": "ONLINE FASHION BRAND",
+    "location": "Bengaluru(Shivaji Nagar)",
+    "city": "Bangalore",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 1.0,
+      "maxLpa": 4.0
+    },
+    "skills": [
+      "Hindi",
+      "Data analysis",
+      "SEM",
+      "Semi voice",
+      "Large",
+      "Brand",
+      "Kam",
+      "Voice"
+    ],
+    "description": "WE HAVE URGENT OENING FOR VARITY OF VERTICAL FOR BANGALORE HINDI KNOWN INTERESTED PLEAS...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-data-analyst-semi-voice-kam-executive-backend-world-largest-brand-adviserjob-com-bengaluru-0-to-5-years-120526011304",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22996,
+    "title": "Sr. Full Stack Developer",
+    "company": "Puma Energy",
+    "location": "Mumbai",
+    "city": "Mumbai",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 0.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "css",
+      "dss",
+      "jwt",
+      "android",
+      "ios",
+      "sql",
+      "cloud",
+      "database design"
+    ],
+    "description": "Develop batch processing jobs for scheduled data exchange: extraction, transformation, ...",
+    "postedDate": "3 weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-sr-full-stack-developer-puma-energy-mumbai-10-to-14-years-140526017356",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22167,
+    "title": "Python Fullstack Developer",
+    "company": "Fortune India 500 IT Services Firm",
+    "location": "Bengaluru",
+    "city": "Bangalore",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 0.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Python full stack",
+      "Python Framework",
+      "Django",
+      "Django Framework",
+      "Python Development",
+      "Python",
+      "Stack",
+      "Development"
+    ],
+    "description": "Job Title: Python Full Stack DeveloperLocation: Pan India",
+    "postedDate": "1 week ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-python-fullstack-developer-tekskills-bengaluru-10-to-15-years-290526918719",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22807,
+    "title": "Java Full Stack Developer",
+    "company": "Reliance Power",
+    "location": "Mumbai",
+    "city": "Mumbai",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Java",
+      "PHP",
+      ".Net",
+      "MongoDB",
+      "Ms Sql Database",
+      "Development",
+      "SQL database",
+      "SQL Server"
+    ],
+    "description": "Development of applications as per the Business requirement which includes Mobile Prefe...",
+    "postedDate": "1 week ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-java-full-stack-developer-reliance-power-ltd-mumbai-1-to-3-years-170226029884",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22808,
+    "title": "Full Stack Developer (JavaScript / TypeScript)",
+    "company": "NJ Group",
+    "location": "Mumbai Suburban",
+    "city": "Mumbai Suburban",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Software Support",
+      "Product Support",
+      "Technical Support",
+      "Application Support",
+      "Javascript",
+      "Software",
+      "Stack",
+      "Typescript"
+    ],
+    "description": "We are open to both freshers and experienced developers who possess strong problem-solv...",
+    "postedDate": "3 weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-full-stack-developer-javascript-typescript-nj-group-mumbai-suburban-0-to-5-years-160526012732",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 21863,
+    "title": "Python FS Developer",
+    "company": "IBU Consulting",
+    "location": "Bengaluru",
+    "city": "Bangalore",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "python",
+      "generative ai",
+      "full stack developer",
+      "ai",
+      "llm",
+      "memory management",
+      "apis",
+      "web technologies"
+    ],
+    "description": "Required Skills & QualificationsExperience in development with Python as the primary la...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-python-fs-developer-ibu-consulting-bengaluru-1-to-5-years-160126500580",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 13474,
+    "title": "Python Technical Content Engineer",
+    "company": "Codersarts",
+    "location": "Noida",
+    "city": "Noida",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Coding",
+      "Django",
+      "Machine learning",
+      "Programming",
+      "Content writing",
+      "Research",
+      "Python",
+      "Online Editor"
+    ],
+    "description": "Python Technical Content Engineer. Have good knowledge of Python, Excellent writing ski...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-python-technical-content-engineer-codersarts-noida-1-to-4-years-190520500110",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22211,
+    "title": "Python Automation- Developer",
+    "company": "Ornnova Technologies India",
+    "location": "Bengaluru",
+    "city": "Bangalore",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 0.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "continuous integration",
+      "software",
+      "ci/cd",
+      "networking",
+      "cloud technologies",
+      "redis",
+      "sql",
+      "microservices"
+    ],
+    "description": "Candidate must be good at writing automation software using Python . Good understanding...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-python-automation-developer-ornnova-technologies-india-private-limited-bengaluru-10-to-15-years-200625500301",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 22520,
+    "title": "Python GPT Developer",
+    "company": "Fluid Ai",
+    "location": "Mumbai",
+    "city": "Mumbai",
+    "roleCategory": "Python Developer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Service management",
+      "Backend",
+      "Version control",
+      "GIT",
+      "Coding",
+      "Neural networks",
+      "Analytical",
+      "Natural language processing"
+    ],
+    "description": "Continuous Learning: A passion for staying updated with the latest advancements in the ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-python-gpt-developer-fluid-ai-mumbai-1-to-4-years-301024505445",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 15145,
+    "title": "Part Time Instructor - Agentic AI",
+    "company": "Interview Kickstart",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Training",
+      "Usage",
+      "Machine learning",
+      "Instructor",
+      "System design",
+      "Deployment",
+      "Research",
+      "Open source"
+    ],
+    "description": "Interview Kickstart is a premier career transformation platform turbocharging tech car...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-part-time-instructor-agentic-ai-interview-kickstart-remote-1-to-4-years-211125501134",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 15179,
+    "title": "English Writing and Content Reviewing Expertise Sought For AI Training",
+    "company": "Freelancer",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Training",
+      "Usage",
+      "Literature",
+      "Analytical",
+      "Machine learning",
+      "Creative writing",
+      "Taxation",
+      "Editor"
+    ],
+    "description": "This is a freelance position that is paid on a per-hour basisWe don t offer internships...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-english-writing-and-content-reviewing-expertise-sought-for-ai-training-outlier-remote-1-to-5-years-080426500906",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 15185,
+    "title": "C Developer AI Fresher",
+    "company": "Sanfoundry",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Computer vision",
+      "deep learning",
+      "C++",
+      "C",
+      "Linux",
+      "Image processing",
+      "Operating systems",
+      "Analytical"
+    ],
+    "description": "Skill Requirement BTECH / MTECH in CS or CE or EE degree preferred or equivalent exper...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-c-developer-ai-fresher-sanfoundry-remote-1-to-5-years-030226502628",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 15187,
+    "title": "Staff Product Manager, AI Identity & Governance",
+    "company": "Jumpcloud",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 0.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Product management",
+      "Automation",
+      "Linux",
+      "Transcription",
+      "Artificial Intelligence",
+      "Windows",
+      "Engineering Design",
+      "Android"
+    ],
+    "description": "All roles at JumpCloud are Remote unless otherwise specified in the Job Description. ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-staff-product-manager-ai-identity-governance-jumpcloud-remote-10-to-15-years-020326503140",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 5859,
+    "title": "Cloud Engineer",
+    "company": "Sndk Corp",
+    "location": "Ahmedabad",
+    "city": "Ahmedabad",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 5.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Automation",
+      "orchestration",
+      "Mobile development",
+      "Architecture",
+      "Infrastructure design",
+      "Cloud",
+      "Standard operating procedures",
+      "Management"
+    ],
+    "description": "Experience in cloud infrastructure design and management, with strong knowledge of AWS,...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-cloud-engineer-sndk-corp-ahmedabad-1-to-5-years-270723500005",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 11030,
+    "title": "AWS DevOps Engineer",
+    "company": "Bluesoft Software Solution",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Cloud computing",
+      "Manager Quality Assurance",
+      "RDBMS",
+      "Coding",
+      "Project management",
+      "Consulting",
+      "power bi",
+      "Workflow"
+    ],
+    "description": ". With our extensive testing experience gained from building and implementing our own s...",
+    "postedDate": "5 days ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-aws-devops-engineer-bluesoft-software-solution-remote-1-to-4-years-040626503706",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 6444,
+    "title": "Google Cloud Author",
+    "company": "Pluralsight",
+    "location": "Remote",
+    "city": "Remote",
+    "roleCategory": "Data Scientist",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "technical writing",
+      "content editing",
+      "google",
+      "teaching",
+      "artificial intelligence",
+      "research",
+      "application development",
+      "editing"
+    ],
+    "description": "contract-based, freelance . Extensive experience as a Google Cloud practitioner in one...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "Remote",
+    "jobUrl": "https://www.naukri.com/job-listings-google-cloud-author-pluralsight-remote-1-to-4-years-191125502715",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 10279,
+    "title": "UX/UI DESIGNER",
+    "company": "Prowebhill",
+    "location": "Kolkata",
+    "city": "Kolkata",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 8.0
+    },
+    "salary": {
+      "minLpa": 10.0,
+      "maxLpa": 18.0
+    },
+    "skills": [
+      "Not Available"
+    ],
+    "description": "Not Available",
+    "postedDate": "Starts in 1-3 months",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-ux-ui-designer-prowebhill-pvt-ltd-kolkata-1-to-5-years-150324500453",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 14277,
+    "title": "Ui/ux designer",
+    "company": "House of Edtech",
+    "location": "Kolkata",
+    "city": "Kolkata",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 2.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Product management",
+      "Graphics",
+      "Product engineering",
+      "Illustrator",
+      "Product design",
+      "HTML",
+      "Photoshop",
+      "Analytics"
+    ],
+    "description": "UI/UX Designer Hiring | House of EdTech (Goenka Kachave LLP) Note: Having a persona...",
+    "postedDate": "1 week ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-ui-ux-designer-house-of-edtech-kolkata-0-to-2-years-010626502828",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 8457,
+    "title": "Business Analyst",
+    "company": "Careervira",
+    "location": "Gurugram",
+    "city": "Gurgaon",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 3.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Qualitative research",
+      "Health insurance",
+      "Data analysis",
+      "SAS",
+      "Database design",
+      "Analytical",
+      "SPSS",
+      "Data mining"
+    ],
+    "description": "Preferably from Tier I or II Postgraduate Institutes . 2+ years of experience in Resear...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-business-analyst-careervira-gurugram-1-to-3-years-100523500872",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 8458,
+    "title": "Business Analyst II",
+    "company": "iQor",
+    "location": "Noida",
+    "city": "Noida",
+    "roleCategory": "Data Analyst",
+    "experience": {
+      "minYears": 1.0,
+      "maxYears": 4.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "Business process",
+      "Electrical engineering",
+      "Data analysis",
+      "Industrial engineering",
+      "Application development",
+      "Customer service",
+      "Troubleshooting",
+      "Continuous improvement"
+    ],
+    "description": "Maintains a thorough knowledge and in-depth field experience regarding emerging or job ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-business-analyst-ii-iqor-noida-1-to-4-years-070126502624",
+    "isFresherFriendly": true
+  },
+  {
+    "externalJobId": 14218,
+    "title": "CONTENT WRITING Expert",
+    "company": "Amici Global Solutions",
+    "location": "Kolkata, Mumbai, New Delhi, Hyderabad, Pune, Chennai, Bengaluru",
+    "city": "Kolkata",
+    "roleCategory": "Machine Learning Engineer",
+    "experience": {
+      "minYears": 0.0,
+      "maxYears": 2.0
+    },
+    "salary": {
+      "minLpa": 0.0,
+      "maxLpa": 0.0
+    },
+    "skills": [
+      "matlab",
+      "python",
+      "c",
+      "machine learning",
+      "communication skills",
+      "Writing",
+      "Content writing",
+      "Content"
+    ],
+    "description": "Collaborate with the design team to ensure content is visually appealing and optimized ...",
+    "postedDate": "3+ weeks ago",
+    "workMode": "On-site",
+    "jobUrl": "https://www.naukri.com/job-listings-content-writing-expert-amici-global-solutions-pvt-ltd-kolkata-mumbai-new-delhi-hyderabad-pune-chennai-bengaluru-0-to-2-years-221124503506",
+    "isFresherFriendly": true
+  }
+]
