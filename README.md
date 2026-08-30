@@ -1,57 +1,82 @@
-# User CRUD API (NestJS)
+# CampusHire
+CampusHire is a student-focused job portal that connects students with recruiters and helps them discover relevant job opportunities.
+## Live Demo
+https://campushire-rose.vercel.app
+#Features
 
-A simple REST API for managing users, built with NestJS. Data is stored in an in-memory array — no database — so it resets whenever the server restarts.
+#Student
+- Student registration and login
+- Browse available job opportunities
+- Search jobs by skills and keywords
+- Filter jobs by category and location
+- View detailed job information
+- Apply for jobs
+- Upload resume while applying
+- Track application status
 
-## Setup
+#Recruiter
+- Recruiter registration and login
+- Recruiter dashboard
+- Post new job opportunities
+- Manage posted jobs
+- View applications
+- Update application status
+- View candidate information
 
-```bash
-npm install
-npm run start:dev   # dev mode with auto-reload
-# or
-npm run build && npm run start:prod
-```
+# UI
+- Responsive design
+- Mobile-friendly interface
+- Dark mode support
+- Purple-themed modern UI
+- Separate student and recruiter experiences
 
-Server runs on `https://campushire-xl9m.onrender.com` by default (override with `PORT` env var).
+##  Tech Stack
+ Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Lucide React
+ Backend
+- NestJS
+- Node.js
+- MongoDB
+- Mongoose
+- JWT Authentication
 
-## Endpoints
+#Other Technologies
+- Cloudinary
+- Nodemailer
+- Git & GitHub
+  #Deployed on
+- Vercel -frontend
+- Render-backend
+- 
 
-| Method | Route         | Description          | Body                                  |
-|--------|---------------|-----------------------|----------------------------------------|
-| GET    | `/users`      | List all users        | —                                      |
-| GET    | `/users/:id`  | Get one user           | —                                      |
-| POST   | `/users`      | Create a user          | `{ name, email, age? }`                |
-| PATCH  | `/users/:id`  | Update a user (partial)| `{ name?, email?, age? }`              |
-| DELETE | `/users/:id`  | Delete a user           | —                                      |
+# Project Structure
 
-## Validation
+CampusHire/
+│
+├── frontend/
+│   ├── app/
+│   │   ├── jobs/
+│   │   ├── recruiter/
+│   │   ├── login/
+│   │   ├── register/
+│   │   └── apply/
+│   │
+│   ├── components/
+│   └── ...
+│
+├── src/
+│   ├── users/
+│   ├── jobs/
+│   ├── applications/
+│   ├── recruiter-jobs/
+│   └── ...
+│
+└── README.md
 
-- `name`: required, non-empty string
-- `email`: required, must be a valid email, must be unique across users
-- `age`: optional, must be a non-negative integer if provided
-- Unknown fields in the request body are rejected (whitelist enforcement)
 
-## Responses
 
-- `404 Not Found` — user id doesn't exist
-- `409 Conflict` — email already in use
-- `400 Bad Request` — validation failure
 
-## Structure
-
-```
-src/
-  main.ts                    - bootstrap, global ValidationPipe
-  app.module.ts               - root module
-  users/
-    user.entity.ts            - User shape
-    users.controller.ts       - routes
-    users.service.ts          - in-memory array + business logic
-    users.module.ts
-    dto/
-      create-user.dto.ts
-      update-user.dto.ts
-```
-
-## Next steps (when you're ready to move past the array)
-
-Swap `UsersService`'s array for TypeORM/Prisma + a real database — the controller and DTOs don't need to change since the array is fully encapsulated inside the service.
