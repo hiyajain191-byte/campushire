@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { MouseEvent, KeyboardEvent } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -80,86 +81,79 @@ const locations = [
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+
   const [user, setUser] = useState<User | null>(null);
 
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [jobsError, setJobsError] = useState("");
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    []
-  );
+  const [selectedCategories, setSelectedCategories] =
+    useState<string[]>([]);
 
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] =
+    useState<string[]>([]);
 
   const [search, setSearch] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [darkMode, setDarkMode] = useState(false);
-
   const [heroMouse, setHeroMouse] = useState({
     x: 0,
     y: 0,
   });
 
-  // ============================================================
-  // DARK MODE
-  // ============================================================
+  const [darkMode, setDarkMode] = useState(false);
+
+  /* =========================
+     DARK MODE
+  ========================= */
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("campushire_theme");
 
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    const shouldUseDark = savedTheme
+      ? savedTheme === "dark"
+      : prefersDark;
+
+    setDarkMode(shouldUseDark);
+
+    document.documentElement.classList.toggle(
+      "dark",
+      shouldUseDark
+    );
   }, []);
 
   function toggleDarkMode() {
-    const nextMode = !darkMode;
+    setDarkMode((prev) => {
+      const next = !prev;
 
-    setDarkMode(nextMode);
+      document.documentElement.classList.toggle(
+        "dark",
+        next
+      );
 
-    if (nextMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("campushire_theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("campushire_theme", "light");
-    }
+      localStorage.setItem(
+        "campushire_theme",
+        next ? "dark" : "light"
+      );
+
+      return next;
+    });
   }
 
-  // ============================================================
-  // LOAD USER
-  // ============================================================
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("campushire_user");
-
-    if (!savedUser) {
-      return;
-    }
-
-    try {
-      const parsedUser: User = JSON.parse(savedUser);
-      setUser(parsedUser);
-    } catch {
-      localStorage.removeItem("campushire_user");
-      localStorage.removeItem("campushire_token");
-    }
-  }, []);
-
-  // ============================================================
-  // HERO MOUSE EFFECT
-  // ============================================================
+  /* =========================
+     HERO MOUSE EFFECT
+  ========================= */
 
   function handleHeroMouseMove(
-    e: React.MouseEvent<HTMLDivElement>
+    e: MouseEvent<HTMLDivElement>
   ) {
     const rect = e.currentTarget.getBoundingClientRect();
 
@@ -175,9 +169,26 @@ export default function HomePage() {
     });
   }
 
-  // ============================================================
-  // FETCH JOBS
-  // ============================================================
+  /* =========================
+     LOAD USER
+  ========================= */
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("campushire_user");
+
+    if (savedUser) {
+      try {
+        const parsedUser: User = JSON.parse(savedUser);
+        setUser(parsedUser);
+      } catch {
+        localStorage.removeItem("campushire_user");
+      }
+    }
+  }, []);
+
+  /* =========================
+     FETCH JOBS
+  ========================= */
 
   useEffect(() => {
     fetchJobs();
@@ -209,7 +220,6 @@ export default function HomePage() {
         : [];
 
       setJobs(jobList);
-      setCurrentPage(1);
     } catch (error) {
       console.error("Failed to fetch jobs:", error);
 
@@ -221,9 +231,9 @@ export default function HomePage() {
     }
   }
 
-  // ============================================================
-  // LOGOUT
-  // ============================================================
+  /* =========================
+     LOGOUT
+  ========================= */
 
   function handleLogout() {
     localStorage.removeItem("campushire_user");
@@ -233,60 +243,53 @@ export default function HomePage() {
     setMenuOpen(false);
   }
 
-  // ============================================================
-  // CATEGORY FILTER
-  // ============================================================
+  /* =========================
+     FILTERS
+  ========================= */
 
   function toggleCategory(category: string) {
-    setSelectedCategories((prev) => {
-      if (prev.includes(category)) {
-        return prev.filter((item) => item !== category);
-      }
-
-      return [...prev, category];
-    });
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((item) => item !== category)
+        : [...prev, category]
+    );
 
     setCurrentPage(1);
   }
-
-  // ============================================================
-  // LOCATION FILTER
-  // ============================================================
 
   function toggleLocation(location: string) {
-    setSelectedLocations((prev) => {
-      if (prev.includes(location)) {
-        return prev.filter((item) => item !== location);
-      }
-
-      return [...prev, location];
-    });
+    setSelectedLocations((prev) =>
+      prev.includes(location)
+        ? prev.filter((item) => item !== location)
+        : [...prev, location]
+    );
 
     setCurrentPage(1);
   }
 
-  // ============================================================
-  // SEARCH
-  // ============================================================
+  /* =========================
+     SEARCH
+  ========================= */
 
   function handleSearch() {
     setCurrentPage(1);
   }
 
   function handleSearchKeyDown(
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: KeyboardEvent<HTMLInputElement>
   ) {
     if (e.key === "Enter") {
       handleSearch();
     }
   }
 
-  // ============================================================
-  // FILTER JOBS
-  // ============================================================
+  /* =========================
+     FILTER JOBS
+  ========================= */
 
   const filteredJobs = jobs.filter((job) => {
     const searchValue = search.toLowerCase().trim();
+
     const locationValue = searchLocation.toLowerCase().trim();
 
     const matchesSearch =
@@ -338,9 +341,9 @@ export default function HomePage() {
     );
   });
 
-  // ============================================================
-  // PAGINATION
-  // ============================================================
+  /* =========================
+     PAGINATION
+  ========================= */
 
   const totalPages = Math.max(
     1,
@@ -358,12 +361,9 @@ export default function HomePage() {
   );
 
   function goToPage(page: number) {
-    const nextPage = Math.min(
-      Math.max(page, 1),
-      totalPages
+    setCurrentPage(
+      Math.min(Math.max(page, 1), totalPages)
     );
-
-    setCurrentPage(nextPage);
 
     window.scrollTo({
       top: 500,
@@ -371,9 +371,9 @@ export default function HomePage() {
     });
   }
 
-  // ============================================================
-  // SALARY
-  // ============================================================
+  /* =========================
+     SALARY
+  ========================= */
 
   function formatSalary(job: Job) {
     const salary = job.salary;
@@ -433,23 +433,15 @@ export default function HomePage() {
     return `Up to ₹${max} LPA`;
   }
 
-  // ============================================================
-  // USER ROLE
-  // ============================================================
-
   const isRecruiter = user?.role === "recruiter";
   const isStudent = user?.role === "student";
-
-  // ============================================================
-  // PAGE
-  // ============================================================
 
   return (
     <main className="min-h-screen bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
 
-      {/* ========================================================
+      {/* =========================
           ANIMATIONS
-      ======================================================== */}
+      ========================= */}
 
       <style jsx>{`
         @keyframes fadeSlideUp {
@@ -559,7 +551,6 @@ export default function HomePage() {
           left: 0;
           width: 40%;
           height: 100%;
-
           background: linear-gradient(
             120deg,
             transparent,
@@ -575,14 +566,12 @@ export default function HomePage() {
         }
       `}</style>
 
-      {/* ========================================================
+      {/* =========================
           NAVBAR
-      ======================================================== */}
+      ========================= */}
 
       <header className="border-b border-slate-200 bg-white transition-colors duration-300 dark:border-slate-800 dark:bg-slate-950">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-
-          {/* LOGO */}
 
           <Link
             href={isRecruiter ? "/recruiter" : "/"}
@@ -600,7 +589,6 @@ export default function HomePage() {
           {/* DESKTOP NAV */}
 
           <nav className="hidden items-center gap-6 text-sm md:flex">
-
             {isStudent && (
               <>
                 <Link
@@ -652,10 +640,9 @@ export default function HomePage() {
             )}
           </nav>
 
-          {/* DESKTOP AUTH */}
+          {/* AUTH */}
 
           <div className="hidden items-center gap-3 text-sm md:flex">
-
             {user ? (
               <>
                 <span className="mr-1 text-slate-600 dark:text-slate-300">
@@ -693,10 +680,8 @@ export default function HomePage() {
             {/* DARK MODE */}
 
             <button
-              type="button"
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"
-              aria-pressed={darkMode}
               className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
                 darkMode
                   ? "bg-purple-900"
@@ -713,12 +698,10 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* MOBILE CONTROLS */}
+          {/* MOBILE BUTTONS */}
 
           <div className="flex items-center gap-2 md:hidden">
-
             <button
-              type="button"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700"
               aria-label="Toggle menu"
               onClick={() => setMenuOpen((value) => !value)}
@@ -731,10 +714,8 @@ export default function HomePage() {
             </button>
 
             <button
-              type="button"
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"
-              aria-pressed={darkMode}
               className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
                 darkMode
                   ? "bg-purple-900"
@@ -824,7 +805,6 @@ export default function HomePage() {
                   </div>
 
                   <button
-                    type="button"
                     onClick={handleLogout}
                     className="py-2.5 text-left font-medium text-purple-900 dark:text-purple-300"
                   >
@@ -833,7 +813,6 @@ export default function HomePage() {
                 </>
               ) : (
                 <div className="flex flex-col gap-2 pt-3">
-
                   <Link
                     href="/login"
                     onClick={() => setMenuOpen(false)}
@@ -849,7 +828,6 @@ export default function HomePage() {
                   >
                     Sign up
                   </Link>
-
                 </div>
               )}
             </div>
@@ -857,18 +835,15 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* ========================================================
+      {/* =========================
           HERO
-      ======================================================== */}
+      ========================= */}
 
-      <section className="mx-auto max-w-6xl px-5 pt-10">
+      <section className="mx-auto max-w-6xl px-5 pt-8 sm:pt-10">
         <div
           onMouseMove={handleHeroMouseMove}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-6 py-16 text-center md:py-20"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-700 via-purple-900 to-indigo-950 px-5 py-12 text-center sm:px-6 sm:py-16 md:py-20"
         >
-
-          {/* GLOW 1 */}
-
           <div
             className="glow-blob pointer-events-none absolute -left-10 -top-10 h-56 w-56 rounded-full bg-purple-500/20 blur-3xl"
             style={{
@@ -878,8 +853,6 @@ export default function HomePage() {
               )`,
             }}
           />
-
-          {/* GLOW 2 */}
 
           <div
             className="glow-blob pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 rounded-full bg-indigo-400/20 blur-3xl"
@@ -892,12 +865,13 @@ export default function HomePage() {
             }}
           />
 
-          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight md:text-5xl">
+          <h1 className="hero-animate gradient-text relative mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
             Find your next opportunity
           </h1>
 
           <p className="hero-animate hero-delay-1 relative mx-auto mt-4 max-w-xl text-sm leading-relaxed text-purple-200 md:text-base">
-            Explore real job opportunities from companies and find the right role for your skills.
+            Explore real job opportunities from companies and find the
+            right role for your skills.
           </p>
 
           <div className="hero-animate hero-delay-2 relative mx-auto mt-6 flex max-w-xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-purple-200 md:text-sm">
@@ -914,9 +888,7 @@ export default function HomePage() {
 
           {/* SEARCH */}
 
-          <div className="hero-animate hero-delay-3 search-glow relative mx-auto mt-8 flex max-w-2xl flex-col items-stretch gap-2 rounded-2xl bg-white p-2 shadow-lg dark:bg-slate-900 sm:flex-row">
-
-            {/* SEARCH JOB */}
+          <div className="hero-animate hero-delay-3 search-glow relative mx-auto mt-8 flex max-w-2xl flex-col items-stretch gap-2 rounded-2xl bg-white p-2 shadow-lg sm:flex-row dark:bg-slate-900">
 
             <div className="flex flex-1 items-center gap-2.5 px-4 py-2.5">
               <Search className="h-4 w-4 shrink-0 text-slate-400" />
@@ -931,9 +903,7 @@ export default function HomePage() {
               />
             </div>
 
-            <div className="my-1.5 hidden w-px bg-slate-200 dark:bg-slate-700 sm:block" />
-
-            {/* LOCATION */}
+            <div className="my-1.5 hidden w-px bg-slate-200 sm:block dark:bg-slate-700" />
 
             <div className="flex flex-1 items-center gap-2.5 px-4 py-2.5">
               <MapPin className="h-4 w-4 shrink-0 text-slate-400" />
@@ -950,10 +920,7 @@ export default function HomePage() {
               />
             </div>
 
-            {/* SEARCH BUTTON */}
-
             <button
-              type="button"
               onClick={handleSearch}
               className="shine-btn shrink-0 rounded-xl bg-purple-900 px-7 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.03] hover:bg-purple-800 active:scale-[0.98]"
             >
@@ -963,11 +930,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ========================================================
+      {/* =========================
           JOB SECTION
-      ======================================================== */}
+      ========================= */}
 
-      <section className="mx-auto max-w-6xl px-5 py-16">
+      <section className="mx-auto max-w-6xl px-5 py-12 sm:py-16">
 
         <div className="mb-8">
           <h2 className="text-xl font-semibold md:text-2xl">
@@ -979,15 +946,32 @@ export default function HomePage() {
           </p>
         </div>
 
+        {/* MOBILE FILTER BUTTON */}
+
+        <div className="mb-6 lg:hidden">
+          <button
+            onClick={() => setFilterOpen(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            <Search className="h-4 w-4" />
+
+            Filters
+
+            {(selectedCategories.length > 0 ||
+              selectedLocations.length > 0) && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-purple-900 px-1.5 text-[10px] text-white">
+                {selectedCategories.length +
+                  selectedLocations.length}
+              </span>
+            )}
+          </button>
+        </div>
+
         <div className="grid gap-10 lg:grid-cols-[210px_1fr]">
 
-          {/* ====================================================
-              FILTER SIDEBAR
-          ==================================================== */}
+          {/* DESKTOP FILTER SIDEBAR */}
 
-          <aside className="flex flex-col gap-8">
-
-            {/* CATEGORY */}
+          <aside className="hidden flex-col gap-8 lg:flex">
 
             <div>
               <h3 className="mb-3 text-sm font-semibold">
@@ -1002,7 +986,9 @@ export default function HomePage() {
                   >
                     <input
                       type="checkbox"
-                      checked={selectedCategories.includes(category)}
+                      checked={selectedCategories.includes(
+                        category
+                      )}
                       onChange={() =>
                         toggleCategory(category)
                       }
@@ -1014,8 +1000,6 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-
-            {/* LOCATION */}
 
             <div>
               <h3 className="mb-3 text-sm font-semibold">
@@ -1030,7 +1014,9 @@ export default function HomePage() {
                   >
                     <input
                       type="checkbox"
-                      checked={selectedLocations.includes(location)}
+                      checked={selectedLocations.includes(
+                        location
+                      )}
                       onChange={() =>
                         toggleLocation(location)
                       }
@@ -1044,9 +1030,105 @@ export default function HomePage() {
             </div>
           </aside>
 
-          {/* ====================================================
-              JOB LIST
-          ==================================================== */}
+          {/* MOBILE FILTER DRAWER */}
+
+          {filterOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+
+              <div
+                className="absolute inset-0 bg-black/40"
+                onClick={() => setFilterOpen(false)}
+              />
+
+              <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-white p-6 shadow-xl dark:bg-slate-950">
+
+                <div className="mb-6 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold">
+                      Filters
+                    </h2>
+
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                      Refine your job search
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setFilterOpen(false)}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700"
+                    aria-label="Close filters"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold">
+                    Search by Categories
+                  </h3>
+
+                  <div className="flex flex-col gap-3">
+                    {categories.map((category) => (
+                      <label
+                        key={category}
+                        className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(
+                            category
+                          )}
+                          onChange={() =>
+                            toggleCategory(category)
+                          }
+                          className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                        />
+
+                        {category}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <h3 className="mb-3 text-sm font-semibold">
+                    Search by Location
+                  </h3>
+
+                  <div className="flex flex-col gap-3">
+                    {locations.map((location) => (
+                      <label
+                        key={location}
+                        className="flex cursor-pointer items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedLocations.includes(
+                            location
+                          )}
+                          onChange={() =>
+                            toggleLocation(location)
+                          }
+                          className="h-5 w-5 rounded border-slate-300 text-purple-900 focus:ring-purple-900 dark:border-slate-600"
+                        />
+
+                        {location}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setFilterOpen(false)}
+                  className="mt-8 w-full rounded-xl bg-purple-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-800"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* JOB LIST */}
 
           <div className="flex flex-col gap-5">
 
@@ -1066,13 +1148,11 @@ export default function HomePage() {
 
             {!loadingJobs && jobsError && (
               <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-900 dark:bg-red-950">
-
                 <p className="text-sm text-red-600 dark:text-red-400">
                   {jobsError}
                 </p>
 
                 <button
-                  type="button"
                   onClick={fetchJobs}
                   className="mt-4 rounded-full bg-purple-900 px-5 py-2 text-sm font-medium text-white hover:bg-purple-800"
                 >
@@ -1087,27 +1167,24 @@ export default function HomePage() {
               !jobsError &&
               paginatedJobs.length > 0 && (
                 <div className="flex flex-col gap-4">
-
                   {paginatedJobs.map((job) => (
                     <div
                       key={job._id}
-                      className="rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+                      className="rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6 dark:border-slate-800 dark:bg-slate-900"
                     >
 
-                      {/* TOP */}
+                      {/* TITLE + SALARY */}
 
-                      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
-
                           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                             {job.title}
                           </h3>
 
                           <p className="mt-1 text-sm font-medium text-purple-900 dark:text-purple-300">
-                            {job.company || "Company not specified"}
+                            {job.company ||
+                              "Company not specified"}
                           </p>
-
                         </div>
 
                         <div className="shrink-0">
@@ -1124,7 +1201,6 @@ export default function HomePage() {
                         {job.location && (
                           <span className="flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-900 dark:bg-purple-950 dark:text-purple-300">
                             <MapPin className="h-3.5 w-3.5" />
-
                             {job.location}
                           </span>
                         )}
@@ -1163,7 +1239,6 @@ export default function HomePage() {
                       {job.skills &&
                         job.skills.length > 0 && (
                           <div className="mt-4 flex flex-wrap gap-2">
-
                             {job.skills
                               .slice(0, 5)
                               .map((skill) => (
@@ -1179,7 +1254,7 @@ export default function HomePage() {
 
                       {/* BOTTOM */}
 
-                      <div className="mt-5 flex flex-col gap-4 border-t border-slate-100 pt-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="mt-5 flex flex-col gap-4 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
 
                         <span className="flex items-center gap-1.5 text-xs text-slate-400">
                           <Clock className="h-3.5 w-3.5" />
@@ -1187,11 +1262,11 @@ export default function HomePage() {
                           {job.postedDate || "Recently"}
                         </span>
 
-                        <div className="flex gap-2">
+                        <div className="flex w-full gap-2 sm:w-auto">
 
                           <Link
                             href={`/jobs/${job._id}`}
-                            className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                            className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 sm:flex-none dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                           >
                             Learn more
                           </Link>
@@ -1199,7 +1274,7 @@ export default function HomePage() {
                           {isStudent && (
                             <Link
                               href={`/jobs/${job._id}/apply`}
-                              className="rounded-full bg-purple-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-800"
+                              className="flex-1 rounded-full bg-purple-900 px-5 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-purple-800 sm:flex-none"
                             >
                               Apply now
                             </Link>
@@ -1217,7 +1292,6 @@ export default function HomePage() {
               !jobsError &&
               filteredJobs.length === 0 && (
                 <div className="rounded-2xl border border-slate-200 p-12 text-center dark:border-slate-800">
-
                   <Search className="mx-auto h-9 w-9 text-slate-300 dark:text-slate-600" />
 
                   <h3 className="mt-4 text-lg font-semibold">
@@ -1235,10 +1309,9 @@ export default function HomePage() {
             {!loadingJobs &&
               !jobsError &&
               filteredJobs.length > 0 && (
-                <div className="mt-4 flex items-center justify-center gap-1.5">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
 
                   <button
-                    type="button"
                     onClick={() =>
                       goToPage(safeCurrentPage - 1)
                     }
@@ -1254,7 +1327,6 @@ export default function HomePage() {
                   ).map((page) => (
                     <button
                       key={page}
-                      type="button"
                       onClick={() => goToPage(page)}
                       className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors ${
                         page === safeCurrentPage
@@ -1267,7 +1339,6 @@ export default function HomePage() {
                   ))}
 
                   <button
-                    type="button"
                     onClick={() =>
                       goToPage(safeCurrentPage + 1)
                     }
@@ -1284,16 +1355,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ========================================================
+      {/* =========================
           CTA
-      ======================================================== */}
+      ========================= */}
 
       {!isRecruiter && (
         <section className="border-y border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
-
           <div className="mx-auto max-w-6xl px-5 py-14">
-
-            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-8 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-950">
+            <div className="flex flex-col gap-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 md:flex-row md:items-center md:justify-between dark:border-slate-800 dark:bg-slate-950">
 
               <div>
                 <h2 className="text-xl font-semibold md:text-2xl">
@@ -1313,24 +1382,20 @@ export default function HomePage() {
 
                 <ArrowRight className="h-4 w-4" />
               </Link>
-
             </div>
           </div>
         </section>
       )}
 
-      {/* ========================================================
+      {/* =========================
           FOOTER
-      ======================================================== */}
+      ========================= */}
 
       <footer className="border-t border-slate-200 dark:border-slate-800">
-
         <div className="mx-auto max-w-6xl px-5 py-6">
-
           <p className="text-xs text-slate-400 dark:text-slate-500">
             © 2026 CampusHire
           </p>
-
         </div>
       </footer>
     </main>
