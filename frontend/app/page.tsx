@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { MouseEvent, KeyboardEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   MapPin,
@@ -80,6 +81,8 @@ const locations = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -183,19 +186,32 @@ export default function HomePage() {
     const savedUser =
       localStorage.getItem("campushire_user");
 
-    if (savedUser) {
-      try {
-        const parsedUser: User =
-          JSON.parse(savedUser);
-
-        setUser(parsedUser);
-      } catch {
-        localStorage.removeItem(
-          "campushire_user"
-        );
-      }
+    if (!savedUser) {
+      router.replace("/login");
+      return;
     }
-  }, []);
+
+    try {
+      const parsedUser: User =
+        JSON.parse(savedUser);
+
+      if (!parsedUser.role) {
+        throw new Error("Invalid user");
+      }
+
+      setUser(parsedUser);
+    } catch {
+      localStorage.removeItem(
+        "campushire_user"
+      );
+
+      localStorage.removeItem(
+        "campushire_token"
+      );
+
+      router.replace("/login");
+    }
+  }, [router]);
 
   /* =========================
      FETCH JOBS
